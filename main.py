@@ -19,6 +19,7 @@ pygame.draw.rect(screen, pygame.Color("white"),
 pygame.display.flip()
 
 while True:
+
     e = pygame.event.poll()
     if e.type == pygame.QUIT:
         break
