@@ -22,17 +22,17 @@ class Rocket(object):
         #Axis unit of movement is specified in globals module, borders considered
         key = pygame.key.get_pressed()
         
-        if key[pygame.K_UP] and self.y_pos > globals.BORDER:
+        if key[pygame.K_UP] and self.y_pos > (globals.BORDER/2):
             self.y_pos += globals.Rocket_y_speed #Move up by y unit
             
-        elif key[pygame.K_DOWN] and self.y_pos < (globals.HEIGHT - globals.BORDER - self.image.get_height()):
+        elif key[pygame.K_DOWN] and self.y_pos < (globals.HEIGHT - (globals.BORDER/2) - self.image.get_height()):
             self.y_pos -= globals.Rocket_y_speed #Move down by y unit
         
-        if key[pygame.K_LEFT] and self.x_pos > globals.BORDER:
+        if key[pygame.K_LEFT] and self.x_pos > (globals.BORDER/2):
             self.x_pos -= globals.Rocket_x_speed #Move left by x unit
             self.image = Rocket_L_scaled
             
-        elif key[pygame.K_RIGHT] and self.x_pos < (globals.WIDTH - globals.BORDER - self.image.get_width()):
+        elif key[pygame.K_RIGHT] and self.x_pos < (globals.WIDTH - (globals.BORDER/2) - self.image.get_width()):
             self.x_pos += globals.Rocket_x_speed #Move right by x unit
             self.image = Rocket_R_scaled
 

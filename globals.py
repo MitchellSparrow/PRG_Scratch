@@ -17,9 +17,9 @@ YELLOW = (255, 255, 0)
 LIGHTBLUE = (0, 155, 155)
 
 # Rocket settings
-Rocket_size = 1
-Rocket_x_speed = 3
-Rocket_y_speed = 3
+Rocket_size = 0.6
+Rocket_x_speed = 5
+Rocket_y_speed = 4
 
 FPS = 60
 FONT_NAME = 'arial'
