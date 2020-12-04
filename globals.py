@@ -18,8 +18,8 @@ LIGHTBLUE = (0, 155, 155)
 
 # Rocket settings
 Rocket_size = 1
-Rocket_x_speed = 2
-Rocket_y_speed = 1
+Rocket_x_speed = 3
+Rocket_y_speed = 3
 
 FPS = 60
 FONT_NAME = 'arial'

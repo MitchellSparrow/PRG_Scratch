@@ -7,10 +7,17 @@ import Rocket_movement
 
 class run_scratch:
     click = False
+    Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
+    Rocket_R_scaled = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
+    )*Rocket_size), int(Rocket_R.get_height()*Rocket_size)))
+    Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
+    Rocket_L_scaled = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
+    )*Rocket_size), int(Rocket_L.get_height()*Rocket_size)))
 
     def __init__(self):
         # Initialize pygame
         pygame.init()
+
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background.jpg")
@@ -22,6 +29,10 @@ class run_scratch:
         pygame.mixer.music.play(
             -1)
 
+        self.image = self.Rocket_R_scaled
+        # Start position of Rocket
+        self.x_pos = 0.5 * WIDTH
+        self.y_pos = 0.5 * HEIGHT
         # Run game
         self.run()
 
@@ -56,8 +67,9 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
-            self.draw_text("Playing",
-                           22, WHITE, WIDTH / 2, HEIGHT / 2)
+            # self.draw_text("Playing",
+            #                22, WHITE, WIDTH / 2, HEIGHT / 2)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     if platform.system() in ['Windows', 'Linux']:
@@ -68,6 +80,23 @@ class run_scratch:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
+            key = pygame.key.get_pressed()
+
+            if key[pygame.K_UP] and self.y_pos > BORDER:
+                self.y_pos += Rocket_y_speed  # Move up by y unit
+
+            elif key[pygame.K_DOWN] and self.y_pos < (HEIGHT - BORDER - self.image.get_height()):
+                self.y_pos -= Rocket_y_speed  # Move down by y unit
+
+            if key[pygame.K_LEFT] and self.x_pos > BORDER:
+                self.x_pos -= Rocket_x_speed  # Move left by x unit
+                self.image = self.Rocket_L_scaled
+
+            elif key[pygame.K_RIGHT] and self.x_pos < (WIDTH - BORDER - self.image.get_width()):
+                self.x_pos += Rocket_x_speed  # Move right by x unit
+                self.image = self.Rocket_R_scaled
+
+            self.screen.blit(self.image, (self.x_pos, self.y_pos))
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -102,7 +131,7 @@ class run_scratch:
 
     def run(self):
         # self.show_home_screen()
-        #waiting = True
+        # waiting = True
 
         while True:
             e = pygame.event.poll()
