@@ -1,5 +1,6 @@
 import pygame
 import os
+import platform
 from globals import *
 
 
@@ -12,6 +13,7 @@ class run_scratch:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background.jpg")
+        pygame.display.set_caption("Flappy Rocket")
         self.rocket = pygame.image.load("./Images/Rockets/Rocket1.png")
         self.clock = pygame.time.Clock()
         # Run game
@@ -85,7 +87,7 @@ class run_scratch:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def muic_toggle(self):
+    def music_toggle(self):
         pass
 
     def run(self):
@@ -106,8 +108,11 @@ class run_scratch:
             self.show_home_screen()
             self.clock.tick(FPS)
 
-        pygame.quit()  # for the rest of the people with windows or Linux
-        os._exit(0)  # for Mac users.
+        # Program termination
+        if platform.system() in ['Windows','Linux']:
+            pygame.quit()  # for Windows or Linux users
+        else:
+            os._exit(0)  # for Mac users.
 
 
 # Lets run the game
