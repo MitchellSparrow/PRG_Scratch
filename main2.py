@@ -2,7 +2,7 @@ import pygame
 import os
 import platform
 from globals import *
-
+import Rocket_movement
 
 class run_scratch:
     click = False
@@ -47,19 +47,21 @@ class run_scratch:
 
     def play(self):
         running = True
-
+        
         while running:
             self.screen.blit(self.background, (0, 0))
             self.draw_text("Playing",
                            22, WHITE, WIDTH / 2, HEIGHT / 2)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    os._exit(0)
+                    if platform.system() in ['Windows','Linux']:
+                        pygame.quit()
+                    else:
+                        os._exit(0)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
-
+            
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -78,8 +80,10 @@ class run_scratch:
                            22, WHITE, WIDTH / 2, HEIGHT / 2)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    os._exit(0)
+                    if platform.system() in ['Windows','Linux']:
+                        pygame.quit()  
+                    else:
+                        os._exit(0)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
