@@ -9,6 +9,7 @@ import pickle
 class run_scratch:
     click = False
     play_music = True
+    highscore = 0
 
     def __init__(self):
         # Initialize pygame
@@ -23,12 +24,13 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
 
+        # try to load the settings file
         try:
-            # try to load the fuile, if it is not there we initialize the kb.
             file = open("settings.txt", "rb")  # read binary
-            dict = pickle.load(file)
+            settings = pickle.load(file)
+            self.play_music = settings['play_music']
+            self.highscore = settings['highscore']
             file.close()
-            self.play_music = dict['play_music']
         except FileNotFoundError:
             pass
 
@@ -62,9 +64,12 @@ class run_scratch:
         self.click = False
 
         self.draw_text(TITLE, 48, WHITE,
-                       WIDTH / 2, HEIGHT / 4)
+                       WIDTH / 2, HEIGHT / 5)
         self.draw_text("Press space to start playing!",
-                       22, WHITE, WIDTH / 2, HEIGHT / 2)
+                       22, WHITE, WIDTH / 2, HEIGHT / 1.8)
+        self.draw_text(f"High Score: {self.highscore}",
+                       22, WHITE, WIDTH / 2, HEIGHT / 3)
+
         pygame.display.flip()
 
     def play(self):
@@ -75,14 +80,7 @@ class run_scratch:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    if platform.system() in ['Windows', 'Linux']:
-                        pygame.quit()
-                    else:
-                        os._exit(0)
-
-                    file = open("settings.txt", "wb")  # write binary
-                    pickle.dump({'play_music': self.play_music}, file)
-                    file.close()
+                    self.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -94,6 +92,11 @@ class run_scratch:
 
             pygame.display.update()
             self.clock.tick(FPS)
+
+        # after the game finishes, update the high score if needed
+        score = 0
+        if score > self.highscore:
+            self.highscore = score
 
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
@@ -149,13 +152,7 @@ class run_scratch:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    if platform.system() in ['Windows', 'Linux']:
-                        pygame.quit()
-                    else:
-                        os._exit(0)
-                    file = open("settings.txt", "wb")  # write binary
-                    pickle.dump({'play_music': self.play_music}, file)
-                    file.close()
+                    self.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -166,17 +163,12 @@ class run_scratch:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def music_toggle(self):
-        pass
-
     def run(self):
-        # self.show_home_screen()
-        # waiting = True
 
         while True:
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
-                break
+                self.exit()
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if e.button == 1:
                     self.click = True
@@ -187,6 +179,7 @@ class run_scratch:
             self.show_home_screen()
             self.clock.tick(FPS)
 
+    def exit(self):
         # Program termination
         if platform.system() in ['Windows', 'Linux']:
             pygame.quit()  # for Windows or Linux users
@@ -194,7 +187,8 @@ class run_scratch:
             os._exit(0)  # for Mac users.
 
         file = open("settings.txt", "wb")  # write binary
-        pickle.dump({'play_music': self.play_music}, file)
+        pickle.dump({'play_music': self.play_music,
+                     'highscore': self.highscore}, file)
         file.close()
 
 
