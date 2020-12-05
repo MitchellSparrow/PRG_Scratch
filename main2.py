@@ -79,6 +79,10 @@ class run_scratch:
                         pygame.quit()
                     else:
                         os._exit(0)
+
+                    file = open("settings.txt", "wb")  # write binary
+                    pickle.dump({'play_music': self.play_music}, file)
+                    file.close()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -149,6 +153,9 @@ class run_scratch:
                         pygame.quit()
                     else:
                         os._exit(0)
+                    file = open("settings.txt", "wb")  # write binary
+                    pickle.dump({'play_music': self.play_music}, file)
+                    file.close()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
