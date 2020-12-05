@@ -10,12 +10,27 @@ class run_scratch:
     click = False
     play_music = True
     highscore = 0
+    height = 600
+    width = 1000
 
     def __init__(self):
         # Initialize pygame
         pygame.init()
 
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        # try to load the settings file
+        try:
+            file = open("settings.txt", "rb")  # read binary
+            settings = pickle.load(file)
+            self.play_music = settings['play_music']
+            self.highscore = settings['highscore']
+            self.height = settings['height']
+            self.width = settings['width']
+            file.close()
+        except FileNotFoundError:
+            pass
+
+        self.screen = pygame.display.set_mode(
+            (self.width, self.height), pygame.RESIZABLE)
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background.jpg")
         pygame.display.set_caption("Flappy Rocket")
@@ -24,21 +39,11 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
 
-        # try to load the settings file
-        try:
-            file = open("settings.txt", "rb")  # read binary
-            settings = pickle.load(file)
-            self.play_music = settings['play_music']
-            self.highscore = settings['highscore']
-            file.close()
-        except FileNotFoundError:
-            pass
-
         if self.play_music:
             pygame.mixer.music.play(
                 -1)
 
-        self.rocket = Rocket()
+        self.rocket = Rocket(self.width, self.height)
 
         # Run game
         self.run()
@@ -47,10 +52,11 @@ class run_scratch:
 
         self.screen.blit(self.background, (0, 0))
         rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
-        self.screen.blit(rotated_rocket, (WIDTH/10, HEIGHT/2))
+        self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
         mx, my = pygame.mouse.get_pos()
 
-        button_1 = pygame.Rect(WIDTH/2-75, HEIGHT*4/5 - 12.5, 150, 50)
+        button_1 = pygame.Rect(
+            self.width/2-75, self.height*4/5 - 12.5, 150, 50)
 
         if button_1.collidepoint((mx, my)):
             if self.click:
@@ -59,16 +65,16 @@ class run_scratch:
         pygame.draw.rect(self.screen, LIGHTBLUE, button_1, border_radius=20)
 
         self.draw_text("Settings", 20, WHITE,
-                       WIDTH/2, HEIGHT*4/5)
+                       self.width/2, self.height*4/5)
 
         self.click = False
 
         self.draw_text(TITLE, 48, WHITE,
-                       WIDTH / 2, HEIGHT / 5)
+                       self.width / 2, self.height / 5)
         self.draw_text("Press space to start playing!",
-                       22, WHITE, WIDTH / 2, HEIGHT / 1.8)
+                       22, WHITE, self.width / 2, self.height / 1.8)
         self.draw_text(f"High Score: {self.highscore}",
-                       22, WHITE, WIDTH / 2, HEIGHT / 3)
+                       22, WHITE, self.width / 2, self.height / 3)
 
         pygame.display.flip()
 
@@ -84,10 +90,16 @@ class run_scratch:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                if event.type == pygame.VIDEORESIZE:
+                    if FULLSCREEN == False:
+                        self.width = event.w
+                        self.height = event.h
+                        self.screen = pygame.display.set_mode(
+                            (event.w, event.h), pygame.RESIZABLE)
 
             key = pygame.key.get_pressed()
 
-            self.rocket.Movement()
+            self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
 
             pygame.display.update()
@@ -115,27 +127,27 @@ class run_scratch:
             self.screen.blit(self.background, (0, 0))
 
             self.draw_text("SETTINGS", 48, WHITE,
-                           WIDTH / 2, HEIGHT / 7)
+                           self.width / 2, self.height / 7)
 
             self.draw_text("Press ESC to go back",
-                           22, WHITE, WIDTH / 2, HEIGHT / 3.5)
+                           22, WHITE, self.width / 2, self.height / 3.5)
 
             self.draw_text("MUSIC",
-                           22, WHITE, WIDTH / 3, HEIGHT / 2)
+                           22, WHITE, self.width / 3, self.height / 2)
 
             on_off_button = pygame.Rect(
-                WIDTH*2/3 - 30, HEIGHT/2 - 7.5, 60, 40)
+                self.width*2/3 - 30, self.height/2 - 7.5, 60, 40)
 
             if self.play_music:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button, border_radius=20)
                 self.draw_text("ON", 20, WHITE,
-                               WIDTH*2/3, HEIGHT/2)
+                               self.width*2/3, self.height/2)
             else:
                 pygame.draw.rect(self.screen, WHITE,
                                  on_off_button, border_radius=20)
                 self.draw_text("OFF", 20, LIGHTBLUE,
-                               WIDTH*2/3, HEIGHT/2)
+                               self.width*2/3, self.height/2)
 
             if on_off_button.collidepoint((mx, my)):
                 if self.click:
@@ -159,6 +171,12 @@ class run_scratch:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click = True
+                if event.type == pygame.VIDEORESIZE:
+                    if FULLSCREEN == False:
+                        self.width = event.w
+                        self.height = event.h
+                        self.screen = pygame.display.set_mode(
+                            (event.w, event.h), pygame.RESIZABLE)
 
             pygame.display.update()
             self.clock.tick(FPS)
@@ -175,6 +193,12 @@ class run_scratch:
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_SPACE:
                     self.play()
+            if e.type == pygame.VIDEORESIZE:
+                if FULLSCREEN == False:
+                    self.width = e.w
+                    self.height = e.h
+                    self.screen = pygame.display.set_mode(
+                        (e.w, e.h), pygame.RESIZABLE)
 
             self.show_home_screen()
             self.clock.tick(FPS)
@@ -188,7 +212,9 @@ class run_scratch:
 
         file = open("settings.txt", "wb")  # write binary
         pickle.dump({'play_music': self.play_music,
-                     'highscore': self.highscore}, file)
+                     'highscore': self.highscore,
+                     'width': self.width,
+                     'height': self.height}, file)
         file.close()
 
 

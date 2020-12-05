@@ -86,8 +86,9 @@ class run_scratch:
                         running = False
                 if event.type == pygame.VIDEORESIZE:
                     if FULLSCREEN == False:
-                        self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                        
+                        self.screen = pygame.display.set_mode(
+                            (event.w, event.h), pygame.RESIZABLE)
+
             key = pygame.key.get_pressed()
 
             self.rocket.Movement()
@@ -164,7 +165,8 @@ class run_scratch:
                         self.click = True
                 if event.type == pygame.VIDEORESIZE:
                     if FULLSCREEN == False:
-                        self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                        self.screen = pygame.display.set_mode(
+                            (event.w, event.h), pygame.RESIZABLE)
 
             pygame.display.update()
             self.clock.tick(FPS)
@@ -183,7 +185,8 @@ class run_scratch:
                     self.play()
             if e.type == pygame.VIDEORESIZE:
                 if FULLSCREEN == False:
-                    self.screen = pygame.display.set_mode((e.w, e.h), pygame.RESIZABLE)
+                    self.screen = pygame.display.set_mode(
+                        (e.w, e.h), pygame.RESIZABLE)
 
             self.show_home_screen()
             self.clock.tick(FPS)
