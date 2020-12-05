@@ -2,7 +2,7 @@ import pygame
 import os
 import platform
 from globals import *
-import Rocket_movement
+#import Rocket_movement
 
 
 class run_scratch:
@@ -67,8 +67,6 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
-            # self.draw_text("Playing",
-            #                22, WHITE, WIDTH / 2, HEIGHT / 2)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -109,10 +107,41 @@ class run_scratch:
 
     def settings(self):
         running = True
+        self.click = False
         while running:
             self.screen.blit(self.background, (0, 0))
-            self.draw_text("settings",
+
+            mx, my = pygame.mouse.get_pos()
+
+            mute_button = pygame.Rect(WIDTH*2/3-75, HEIGHT*4/5 - 12.5, 150, 50)
+            unmute_button = pygame.Rect(WIDTH/3-75, HEIGHT*4/5 - 12.5, 150, 50)
+
+            pygame.draw.rect(self.screen, LIGHTBLUE,
+                             mute_button, border_radius=20)
+
+            self.draw_text("Mute Music", 20, WHITE,
+                           WIDTH*2/3, HEIGHT*4/5)
+
+            pygame.draw.rect(self.screen, WHITE,
+                             unmute_button, border_radius=20)
+
+            self.draw_text("Unmute Music", 20, LIGHTBLUE,
+                           WIDTH/3, HEIGHT*4/5)
+
+            if mute_button.collidepoint((mx, my)):
+                if self.click:
+                    pygame.mixer.music.pause()
+
+            if unmute_button.collidepoint((mx, my)):
+                if self.click:
+                    pygame.mixer.music.play(-1)
+
+            self.click = False
+
+            self.draw_text("Press ESC to go back",
                            22, WHITE, WIDTH / 2, HEIGHT / 2)
+            pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     if platform.system() in ['Windows', 'Linux']:
@@ -122,6 +151,9 @@ class run_scratch:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
 
             pygame.display.update()
             self.clock.tick(FPS)
