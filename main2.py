@@ -3,10 +3,12 @@ import os
 import platform
 from globals import *
 from Rocket2 import Rocket
+import pickle
 
 
 class run_scratch:
     click = False
+    play_music = True
 
     def __init__(self):
         # Initialize pygame
@@ -20,8 +22,19 @@ class run_scratch:
         self.clock = pygame.time.Clock()
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
-        pygame.mixer.music.play(
-            -1)
+
+        try:
+            # try to load the fuile, if it is not there we initialize the kb.
+            file = open("settings.txt", "rb")  # read binary
+            dict = pickle.load(file)
+            file.close()
+            self.play_music = dict['play_music']
+        except FileNotFoundError:
+            pass
+
+        if self.play_music:
+            pygame.mixer.music.play(
+                -1)
 
         self.rocket = Rocket()
 
@@ -89,37 +102,45 @@ class run_scratch:
         running = True
         self.click = False
         while running:
-            self.screen.blit(self.background, (0, 0))
 
             mx, my = pygame.mouse.get_pos()
 
-            mute_button = pygame.Rect(WIDTH*2/3-75, HEIGHT*4/5 - 12.5, 150, 50)
-            unmute_button = pygame.Rect(WIDTH/3-75, HEIGHT*4/5 - 12.5, 150, 50)
+            self.screen.blit(self.background, (0, 0))
 
-            pygame.draw.rect(self.screen, LIGHTBLUE,
-                             mute_button, border_radius=20)
+            self.draw_text("SETTINGS", 48, WHITE,
+                           WIDTH / 2, HEIGHT / 7)
 
-            self.draw_text("Mute Music", 20, WHITE,
-                           WIDTH*2/3, HEIGHT*4/5)
+            self.draw_text("Press ESC to go back",
+                           22, WHITE, WIDTH / 2, HEIGHT / 3.5)
 
-            pygame.draw.rect(self.screen, WHITE,
-                             unmute_button, border_radius=20)
+            self.draw_text("MUSIC",
+                           22, WHITE, WIDTH / 3, HEIGHT / 2)
 
-            self.draw_text("Unmute Music", 20, LIGHTBLUE,
-                           WIDTH/3, HEIGHT*4/5)
+            on_off_button = pygame.Rect(
+                WIDTH*2/3 - 30, HEIGHT/2 - 7.5, 60, 40)
 
-            if mute_button.collidepoint((mx, my)):
+            if self.play_music:
+                pygame.draw.rect(self.screen, LIGHTBLUE,
+                                 on_off_button, border_radius=20)
+                self.draw_text("ON", 20, WHITE,
+                               WIDTH*2/3, HEIGHT/2)
+            else:
+                pygame.draw.rect(self.screen, WHITE,
+                                 on_off_button, border_radius=20)
+                self.draw_text("OFF", 20, LIGHTBLUE,
+                               WIDTH*2/3, HEIGHT/2)
+
+            if on_off_button.collidepoint((mx, my)):
                 if self.click:
-                    pygame.mixer.music.pause()
-
-            if unmute_button.collidepoint((mx, my)):
-                if self.click:
-                    pygame.mixer.music.play(-1)
+                    if self.play_music:
+                        pygame.mixer.music.pause()
+                        self.play_music = False
+                    else:
+                        pygame.mixer.music.play(-1)
+                        self.play_music = True
 
             self.click = False
 
-            self.draw_text("Press ESC to go back",
-                           22, WHITE, WIDTH / 2, HEIGHT / 2)
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -164,6 +185,10 @@ class run_scratch:
             pygame.quit()  # for Windows or Linux users
         else:
             os._exit(0)  # for Mac users.
+
+        file = open("settings.txt", "wb")  # write binary
+        pickle.dump({'play_music': self.play_music}, file)
+        file.close()
 
 
 # Lets run the game

@@ -21,6 +21,7 @@ Rocket_size = 0.5
 Rocket_x_speed = 5
 Rocket_y_speed = 4
 
+
 FPS = 60
 FONT_NAME = 'arial'
 CLICK = False

@@ -37,7 +37,7 @@ class Rocket:
             self.x_pos -= Rocket_x_speed  # Move left by x unit
             self.image = self.Rocket_L_scaled
 
-        elif key[pygame.K_RIGHT] and self.x_pos < (WIDTH - (BORDER/2)- self.image.get_width()):
+        elif key[pygame.K_RIGHT] and self.x_pos < (WIDTH - (BORDER/2) - self.image.get_width()):
             self.x_pos += Rocket_x_speed  # Move right by x unit
             self.image = self.Rocket_R_scaled
 
