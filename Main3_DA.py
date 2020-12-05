@@ -2,17 +2,14 @@ import pygame
 import os
 import platform
 from globals import *
-import Rocket_movement_DA
+from Rocket2 import Rocket
+import pickle
 
 
 class run_scratch:
     click = False
-    Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
-    Rocket_R_scaled = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
-    )*Rocket_size), int(Rocket_R.get_height()*Rocket_size)))
-    Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
-    Rocket_L_scaled = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
-    )*Rocket_size), int(Rocket_L.get_height()*Rocket_size)))
+    play_music = True
+    highscore = 0
 
     def __init__(self):
         # Initialize pygame
@@ -22,24 +19,34 @@ class run_scratch:
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background.jpg")
         pygame.display.set_caption("Flappy Rocket")
-        self.rocket = pygame.image.load("./Images/Rockets/Rocket1.png")
+        self.rocket_image = pygame.image.load("./Images/Rockets/Rocket1.png")
         self.clock = pygame.time.Clock()
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
-        pygame.mixer.music.play(
-            -1)
 
-        self.image = self.Rocket_R_scaled
-        # Start position of Rocket
-        self.x_pos = 0.5 * WIDTH
-        self.y_pos = 0.5 * HEIGHT
+        # try to load the settings file
+        try:
+            file = open("settings.txt", "rb")  # read binary
+            settings = pickle.load(file)
+            self.play_music = settings['play_music']
+            self.highscore = settings['highscore']
+            file.close()
+        except FileNotFoundError:
+            pass
+
+        if self.play_music:
+            pygame.mixer.music.play(
+                -1)
+
+        self.rocket = Rocket()
+
         # Run game
         self.run()
 
     def show_home_screen(self):
 
         self.screen.blit(self.background, (0, 0))
-        rotated_rocket = pygame.transform.rotate(self.rocket, 25)
+        rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (WIDTH/10, HEIGHT/2))
         mx, my = pygame.mouse.get_pos()
 
@@ -57,9 +64,12 @@ class run_scratch:
         self.click = False
 
         self.draw_text(TITLE, 48, WHITE,
-                       WIDTH / 2, HEIGHT / 4)
+                       WIDTH / 2, HEIGHT / 5)
         self.draw_text("Press space to start playing!",
-                       22, WHITE, WIDTH / 2, HEIGHT / 2)
+                       22, WHITE, WIDTH / 2, HEIGHT / 1.8)
+        self.draw_text(f"High Score: {self.highscore}",
+                       22, WHITE, WIDTH / 2, HEIGHT / 3)
+
         pygame.display.flip()
 
     def play(self):
@@ -67,38 +77,29 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
-            # self.draw_text("Playing",
-            #                22, WHITE, WIDTH / 2, HEIGHT / 2)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    if platform.system() in ['Windows', 'Linux']:
-                        pygame.quit()
-                    else:
-                        os._exit(0)
+                    self.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
-
+                if event.type == pygame.VIDEORESIZE:
+                    if FULLSCREEN == False:
+                        self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                        
             key = pygame.key.get_pressed()
 
-            if key[pygame.K_UP] and self.y_pos > (BORDER/2):
-                self.y_pos -= Rocket_y_speed  # Move up by y unit
+            self.rocket.Movement()
+            self.rocket.Draw(self.screen)
 
-            elif key[pygame.K_DOWN] and self.y_pos < (HEIGHT - (BORDER/2) - self.image.get_height()):
-                self.y_pos += Rocket_y_speed  # Move down by y unit
-
-            if key[pygame.K_LEFT] and self.x_pos > (BORDER/2):
-                self.x_pos -= Rocket_x_speed  # Move left by x unit
-                self.image = self.Rocket_L_scaled
-
-            elif key[pygame.K_RIGHT] and self.x_pos < (WIDTH - (BORDER/2) - self.image.get_width()):
-                self.x_pos += Rocket_x_speed  # Move right by x unit
-                self.image = self.Rocket_R_scaled
-
-            self.screen.blit(self.image, (self.x_pos, self.y_pos))
             pygame.display.update()
             self.clock.tick(FPS)
+
+        # after the game finishes, update the high score if needed
+        score = 0
+        if score > self.highscore:
+            self.highscore = score
 
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
@@ -109,49 +110,95 @@ class run_scratch:
 
     def settings(self):
         running = True
+        self.click = False
         while running:
+
+            mx, my = pygame.mouse.get_pos()
+
             self.screen.blit(self.background, (0, 0))
-            self.draw_text("settings",
-                           22, WHITE, WIDTH / 2, HEIGHT / 2)
+
+            self.draw_text("SETTINGS", 48, WHITE,
+                           WIDTH / 2, HEIGHT / 7)
+
+            self.draw_text("Press ESC to go back",
+                           22, WHITE, WIDTH / 2, HEIGHT / 3.5)
+
+            self.draw_text("MUSIC",
+                           22, WHITE, WIDTH / 3, HEIGHT / 2)
+
+            on_off_button = pygame.Rect(
+                WIDTH*2/3 - 30, HEIGHT/2 - 7.5, 60, 40)
+
+            if self.play_music:
+                pygame.draw.rect(self.screen, LIGHTBLUE,
+                                 on_off_button, border_radius=20)
+                self.draw_text("ON", 20, WHITE,
+                               WIDTH*2/3, HEIGHT/2)
+            else:
+                pygame.draw.rect(self.screen, WHITE,
+                                 on_off_button, border_radius=20)
+                self.draw_text("OFF", 20, LIGHTBLUE,
+                               WIDTH*2/3, HEIGHT/2)
+
+            if on_off_button.collidepoint((mx, my)):
+                if self.click:
+                    if self.play_music:
+                        pygame.mixer.music.pause()
+                        self.play_music = False
+                    else:
+                        pygame.mixer.music.play(-1)
+                        self.play_music = True
+
+            self.click = False
+
+            pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    if platform.system() in ['Windows', 'Linux']:
-                        pygame.quit()
-                    else:
-                        os._exit(0)
+                    self.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
+                if event.type == pygame.VIDEORESIZE:
+                    if FULLSCREEN == False:
+                        self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
 
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def music_toggle(self):
-        pass
-
     def run(self):
-        # self.show_home_screen()
-        # waiting = True
 
         while True:
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
-                break
+                self.exit()
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if e.button == 1:
                     self.click = True
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_SPACE:
                     self.play()
+            if e.type == pygame.VIDEORESIZE:
+                if FULLSCREEN == False:
+                    self.screen = pygame.display.set_mode((e.w, e.h), pygame.RESIZABLE)
 
             self.show_home_screen()
             self.clock.tick(FPS)
 
+    def exit(self):
         # Program termination
         if platform.system() in ['Windows', 'Linux']:
             pygame.quit()  # for Windows or Linux users
         else:
             os._exit(0)  # for Mac users.
+
+        file = open("settings.txt", "wb")  # write binary
+        pickle.dump({'play_music': self.play_music,
+                     'highscore': self.highscore}, file)
+        file.close()
 
 
 # Lets run the game
