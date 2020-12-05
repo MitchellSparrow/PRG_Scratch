@@ -2,17 +2,11 @@ import pygame
 import os
 import platform
 from globals import *
-#import Rocket_movement
+from Rocket2 import Rocket
 
 
 class run_scratch:
     click = False
-    Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
-    Rocket_R_scaled = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
-    )*Rocket_size), int(Rocket_R.get_height()*Rocket_size)))
-    Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
-    Rocket_L_scaled = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
-    )*Rocket_size), int(Rocket_L.get_height()*Rocket_size)))
 
     def __init__(self):
         # Initialize pygame
@@ -22,24 +16,22 @@ class run_scratch:
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background.jpg")
         pygame.display.set_caption("Flappy Rocket")
-        self.rocket = pygame.image.load("./Images/Rockets/Rocket1.png")
+        self.rocket_image = pygame.image.load("./Images/Rockets/Rocket1.png")
         self.clock = pygame.time.Clock()
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
         pygame.mixer.music.play(
             -1)
 
-        self.image = self.Rocket_R_scaled
-        # Start position of Rocket
-        self.x_pos = 0.5 * WIDTH
-        self.y_pos = 0.5 * HEIGHT
+        self.rocket = Rocket()
+
         # Run game
         self.run()
 
     def show_home_screen(self):
 
         self.screen.blit(self.background, (0, 0))
-        rotated_rocket = pygame.transform.rotate(self.rocket, 25)
+        rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (WIDTH/10, HEIGHT/2))
         mx, my = pygame.mouse.get_pos()
 
@@ -80,21 +72,9 @@ class run_scratch:
 
             key = pygame.key.get_pressed()
 
-            if key[pygame.K_UP] and self.y_pos > BORDER:
-                self.y_pos += Rocket_y_speed  # Move up by y unit
+            self.rocket.Movement()
+            self.rocket.Draw(self.screen)
 
-            elif key[pygame.K_DOWN] and self.y_pos < (HEIGHT - BORDER - self.image.get_height()):
-                self.y_pos -= Rocket_y_speed  # Move down by y unit
-
-            if key[pygame.K_LEFT] and self.x_pos > BORDER:
-                self.x_pos -= Rocket_x_speed  # Move left by x unit
-                self.image = self.Rocket_L_scaled
-
-            elif key[pygame.K_RIGHT] and self.x_pos < (WIDTH - BORDER - self.image.get_width()):
-                self.x_pos += Rocket_x_speed  # Move right by x unit
-                self.image = self.Rocket_R_scaled
-
-            self.screen.blit(self.image, (self.x_pos, self.y_pos))
             pygame.display.update()
             self.clock.tick(FPS)
 
