@@ -12,6 +12,7 @@ class run_scratch:
     highscore = 0
     height = 600
     width = 1000
+    quit = False
 
     def __init__(self):
         # Initialize pygame
@@ -84,9 +85,19 @@ class run_scratch:
         while running:
             self.screen.blit(self.background, (0, 0))
 
+            key = pygame.key.get_pressed()
+
+            self.rocket.Movement(self.width, self.height)
+            self.rocket.Draw(self.screen)
+
+            pygame.display.update()
+            self.clock.tick(FPS)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
+                    running = False
+                    self.quit = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -96,14 +107,6 @@ class run_scratch:
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
-
-            key = pygame.key.get_pressed()
-
-            self.rocket.Movement(self.width, self.height)
-            self.rocket.Draw(self.screen)
-
-            pygame.display.update()
-            self.clock.tick(FPS)
 
         # after the game finishes, update the high score if needed
         score = 0
@@ -124,7 +127,6 @@ class run_scratch:
         while running:
 
             mx, my = pygame.mouse.get_pos()
-
             self.screen.blit(self.background, (0, 0))
 
             self.draw_text("SETTINGS", 48, WHITE,
@@ -158,12 +160,14 @@ class run_scratch:
                         self.play_music = True
 
             self.click = False
-
-            pygame.display.flip()
+            pygame.display.update()
+            self.clock.tick(FPS)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
+                    running = False
+                    self.quit = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -177,15 +181,15 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
 
-            pygame.display.update()
-            self.clock.tick(FPS)
-
     def run(self):
 
-        while True:
+        while not self.quit:
+            self.show_home_screen()
+            self.clock.tick(FPS)
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
                 self.exit()
+                break
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if e.button == 1:
                     self.click = True
@@ -199,11 +203,9 @@ class run_scratch:
                     self.screen = pygame.display.set_mode(
                         (e.w, e.h), pygame.RESIZABLE)
 
-            self.show_home_screen()
-            self.clock.tick(FPS)
-
     def exit(self):
         # Program termination
+        running = False
         if platform.system() in ['Windows', 'Linux']:
             pygame.quit()  # for Windows or Linux users
         else:
