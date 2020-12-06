@@ -210,14 +210,13 @@ class run_scratch:
             pygame.quit()  # for Windows or Linux users
         else:
             os._exit(0)  # for Mac users.
-        sys.exit()
         file = open("settings.txt", "wb")  # write binary
         pickle.dump({'play_music': self.play_music,
                      'highscore': self.highscore,
                      'width': self.width,
                      'height': self.height}, file)
         file.close()
-
+        sys.exit()
 
 # Lets run the game
 run_scratch()
