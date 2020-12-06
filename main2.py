@@ -112,6 +112,7 @@ class run_scratch:
 
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
+        #font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
@@ -128,10 +129,8 @@ class run_scratch:
 
             self.draw_text("SETTINGS", 48, WHITE,
                            self.width / 2, self.height / 7)
-
             self.draw_text("Press ESC to go back",
                            22, WHITE, self.width / 2, self.height / 3.5)
-
             self.draw_text("MUSIC",
                            22, WHITE, self.width / 3, self.height / 2)
 
