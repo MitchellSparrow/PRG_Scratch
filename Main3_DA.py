@@ -103,7 +103,7 @@ class run_scratch:
                     if event.key == pygame.K_ESCAPE:
                         running = False
                 if event.type == pygame.VIDEORESIZE:
-                    if FULLSCREEN == False:
+                    if self.fullscreen is not True:
                         self.width = event.w
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
@@ -200,7 +200,7 @@ class run_scratch:
                     if event.button == 1:
                         self.click = True
                 if event.type == pygame.VIDEORESIZE:
-                    if FULLSCREEN == False:
+                    if self.fullscreen is not True:
                         self.width = event.w
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
@@ -222,7 +222,7 @@ class run_scratch:
                 if e.key == pygame.K_SPACE:
                     self.play()
             if e.type == pygame.VIDEORESIZE:
-                if FULLSCREEN == False:
+                if self.fullscreen is not True:
                     self.width = e.w
                     self.height = e.h
                     self.screen = pygame.display.set_mode(
