@@ -1,6 +1,5 @@
 import pygame
 import os
-import sys
 import platform
 from globals import *
 from Rocket2 import Rocket
@@ -13,6 +12,8 @@ class run_scratch:
     highscore = 0
     height = 600
     width = 1000
+    fullscreen = False
+    quit = False
 
     def __init__(self):
         # Initialize pygame
@@ -85,9 +86,19 @@ class run_scratch:
         while running:
             self.screen.blit(self.background, (0, 0))
 
+            key = pygame.key.get_pressed()
+
+            self.rocket.Movement(self.width, self.height)
+            self.rocket.Draw(self.screen)
+
+            pygame.display.update()
+            self.clock.tick(FPS)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
+                    running = False
+                    self.quit = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -97,14 +108,6 @@ class run_scratch:
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
-
-            key = pygame.key.get_pressed()
-
-            self.rocket.Movement(self.width, self.height)
-            self.rocket.Draw(self.screen)
-
-            pygame.display.update()
-            self.clock.tick(FPS)
 
         # after the game finishes, update the high score if needed
         score = 0
@@ -125,7 +128,6 @@ class run_scratch:
         while running:
 
             mx, my = pygame.mouse.get_pos()
-
             self.screen.blit(self.background, (0, 0))
 
             self.draw_text("SETTINGS", 48, WHITE,
@@ -134,10 +136,17 @@ class run_scratch:
                            22, WHITE, self.width / 2, self.height / 3.5)
             self.draw_text("MUSIC",
                            22, WHITE, self.width / 3, self.height / 2)
-
+            self.draw_text("FULLSCREEN",
+                           22, WHITE, self.width / 3, int(self.height / 1.5))
+            
+            #Create ON/OFF buttons
             on_off_button = pygame.Rect(
                 self.width*2/3 - 30, self.height/2 - 7.5, 60, 40)
-
+            
+            on_off_button2 = pygame.Rect(
+                self.width*2/3 - 30, int(self.height/1.5 - 7.5), 60, 40)
+            
+            #MUSIC option
             if self.play_music:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button, border_radius=20)
@@ -157,14 +166,33 @@ class run_scratch:
                     else:
                         pygame.mixer.music.play(-1)
                         self.play_music = True
+            
+           #FULLSCREEN option
+            if self.fullscreen:
+                pygame.draw.rect(self.screen, LIGHTBLUE,
+                                 on_off_button2, border_radius=20)
+                self.draw_text("ON", 20, WHITE,
+                               self.width*2/3, self.height/1.5)
+            else:
+                pygame.draw.rect(self.screen, WHITE,
+                                 on_off_button2, border_radius=20)
+                self.draw_text("OFF", 20, LIGHTBLUE,
+                               self.width*2/3, self.height/1.5)
 
+            if on_off_button2.collidepoint((mx, my)):
+                if self.click:
+                    self.fullscreen = not self.fullscreen
+                    #FULLSCREEN CODE TO BE ADDED HERE
+            
             self.click = False
-
-            pygame.display.flip()
+            pygame.display.update()
+            self.clock.tick(FPS)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
+                    running = False
+                    self.quit = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -178,15 +206,15 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
 
-            pygame.display.update()
-            self.clock.tick(FPS)
-
     def run(self):
 
-        while True:
+        while not self.quit:
+            self.show_home_screen()
+            self.clock.tick(FPS)
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
                 self.exit()
+                break
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if e.button == 1:
                     self.click = True
@@ -200,9 +228,6 @@ class run_scratch:
                     self.screen = pygame.display.set_mode(
                         (e.w, e.h), pygame.RESIZABLE)
 
-            self.show_home_screen()
-            self.clock.tick(FPS)
-
     def exit(self):
         # Program termination
         running = False
@@ -210,13 +235,14 @@ class run_scratch:
             pygame.quit()  # for Windows or Linux users
         else:
             os._exit(0)  # for Mac users.
+
         file = open("settings.txt", "wb")  # write binary
         pickle.dump({'play_music': self.play_music,
                      'highscore': self.highscore,
                      'width': self.width,
                      'height': self.height}, file)
         file.close()
-        sys.exit()
+
 
 # Lets run the game
 run_scratch()
