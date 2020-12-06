@@ -7,7 +7,7 @@ import os
 
 W, H = 852, 480
 
-
+    
 pygame.init()
 
 clock = pygame.time.Clock()

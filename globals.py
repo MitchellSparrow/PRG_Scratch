@@ -22,6 +22,9 @@ Rocket_size = 0.5
 Rocket_x_speed = 5
 Rocket_y_speed = 4
 
+#Asteroid settings
+Asteroid_size = 0.5
+
 
 FPS = 60
 FONT_NAME = 'arial'
