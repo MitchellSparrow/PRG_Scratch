@@ -30,11 +30,12 @@ class run_scratch:
             file.close()
         except FileNotFoundError:
             pass
-
+        
+        self.max_width, self.max_height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.screen = pygame.display.set_mode(
             (self.width, self.height), pygame.RESIZABLE)
         self.background = pygame.image.load(
-            "./Images/Backgrounds/Space_Background.jpg")
+            "./Images/Backgrounds/Space_Background_1080.jpg")
         pygame.display.set_caption("Flappy Rocket")
         self.rocket_image = pygame.image.load("./Images/Rockets/Rocket1.png")
         self.clock = pygame.time.Clock()
@@ -87,8 +88,8 @@ class run_scratch:
             self.screen.blit(self.background, (0, 0))
 
             key = pygame.key.get_pressed()
-
-            self.rocket.Movement(self.width, self.height)
+            
+            self.rocket.Movement(self.width, self.height) 
             self.rocket.Draw(self.screen)
 
             pygame.display.update()
@@ -167,7 +168,7 @@ class run_scratch:
                         pygame.mixer.music.play(-1)
                         self.play_music = True
             
-           #FULLSCREEN option
+           #FULLSCREEN option - Cannot handle dual monitors with different resolutions
             if self.fullscreen:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button2, border_radius=20)
@@ -180,9 +181,19 @@ class run_scratch:
                                self.width*2/3, self.height/1.5)
 
             if on_off_button2.collidepoint((mx, my)):
-                if self.click:
+                if self.click:                        
                     self.fullscreen = not self.fullscreen
-                    #FULLSCREEN CODE TO BE ADDED HERE
+                    if self.fullscreen is True:
+                        bg_path = "./Images/Backgrounds/Space_Background_" + str(self.max_height) + ".jpg"
+                        self.background = pygame.image.load(bg_path)
+                        self.width = self.max_width
+                        self.height = self.max_height
+                        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+                    else:
+                        bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
+                        self.background = pygame.image.load(bg_path)
+                        self.screen = pygame.display.set_mode((1000, 600), pygame.RESIZABLE)
+
             
             self.click = False
             pygame.display.update()
