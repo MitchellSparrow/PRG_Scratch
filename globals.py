@@ -3,7 +3,7 @@
 # Window height and width
 HEIGHT = 600
 WIDTH = 1000
-
+FULLSCREEN = False
 
 BORDER = 40
 TITLE = "Scratch"
