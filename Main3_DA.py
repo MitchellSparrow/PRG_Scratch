@@ -47,6 +47,7 @@ class run_scratch:
                 -1)
 
         self.rocket = Rocket(self.width, self.height)
+        self.Trocket = Rocket(self.width, self.height)
 
         # Run game
         self.run()
@@ -60,25 +61,43 @@ class run_scratch:
 
         button_1 = pygame.Rect(
             self.width/2-75, self.height*4/5 - 12.5, 150, 50)
+        
+        button_2 = pygame.Rect(
+            self.width/2-75, self.height*7/10 - 12.5, 150, 50)
 
         if button_1.collidepoint((mx, my)):
             if self.click:
                 self.settings()
 
+        if button_2.collidepoint((mx, my)):
+            if self.click:
+                self.tutorial()
+                
         pygame.draw.rect(self.screen, LIGHTBLUE, button_1, border_radius=20)
-
+        pygame.draw.rect(self.screen, LIGHTBLUE, button_2, border_radius=20)
+        
         self.draw_text("Settings", 20, WHITE,
                        self.width/2, self.height*4/5)
+        self.draw_text("Tutorial", 20, WHITE,
+                       self.width/2, self.height*7/10)
 
         self.click = False
-
-        self.draw_text(TITLE, 48, WHITE,
+        
+        if self.fullscreen:
+            self.draw_text(TITLE, 72, WHITE,
                        self.width / 2, self.height / 5)
-        self.draw_text("Press space to start playing!",
+            self.draw_text(f"High Score: {self.highscore}",
+                       48, WHITE, self.width / 2, self.height / 3)
+            self.draw_text("Press space to start playing!",
+                       48, WHITE, self.width / 2, self.height / 1.8)
+        else:
+            self.draw_text(TITLE, 48, WHITE,
+                       self.width / 2, self.height / 5)
+            self.draw_text(f"High Score: {self.highscore}",
+                       22, WHITE, self.width / 2, self.height / 3)  
+            self.draw_text("Press space to start playing!",
                        22, WHITE, self.width / 2, self.height / 1.8)
-        self.draw_text(f"High Score: {self.highscore}",
-                       22, WHITE, self.width / 2, self.height / 3)
-
+            
         pygame.display.flip()
 
     def play(self):
@@ -115,6 +134,56 @@ class run_scratch:
         if score > self.highscore:
             self.highscore = score
 
+    def tutorial(self):
+        running = True
+
+        while running:
+            #Background
+            self.screen.blit(self.background, (0, 0))
+
+            #Tutorial rocket
+            key = pygame.key.get_pressed()
+            self.Trocket.Movement(self.width, self.height) 
+            self.Trocket.Draw(self.screen)
+
+            #Tutorial screen text
+            if self.fullscreen:
+                self.draw_text("Tutorial",
+                               72, WHITE, self.width / 2, self.height / 7)
+                self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
+                               48, WHITE, self.width / 2, 2*self.height / 7 )
+                self.draw_text("Avoid the asteroids for as long as possible",
+                               48, WHITE, self.width / 2, 3*self.height / 7)
+                self.draw_text("Your score increases over time, try to beat the high score!",
+                               48, WHITE, self.width / 2, 4*self.height / 7)
+            else:
+                self.draw_text("Tutorial",
+                               48, WHITE, self.width / 2, self.height / 7)
+                self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
+                               22, WHITE, self.width / 2, 2*self.height / 7 )
+                self.draw_text("Avoid the asteroids for as long as possible",
+                               22, WHITE, self.width / 2, 3*self.height / 7)
+                self.draw_text("Your score increases over time, try to beat the high score!",
+                               22, WHITE, self.width / 2, 4*self.height / 7)
+            
+            pygame.display.update()
+            self.clock.tick(FPS)
+     
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.exit()
+                    running = False
+                    self.quit = True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                if event.type == pygame.VIDEORESIZE:
+                    if self.fullscreen is not True:
+                        self.width = event.w
+                        self.height = event.h
+                        self.screen = pygame.display.set_mode(
+                            (event.w, event.h), pygame.RESIZABLE)
+    
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
         #font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
@@ -126,6 +195,7 @@ class run_scratch:
     def settings(self):
         running = True
         self.click = False
+
         while running:
 
             mx, my = pygame.mouse.get_pos()
@@ -134,11 +204,11 @@ class run_scratch:
             self.draw_text("SETTINGS", 48, WHITE,
                            self.width / 2, self.height / 7)
             self.draw_text("Press ESC to go back",
-                           22, WHITE, self.width / 2, self.height / 3.5)
+                           48, WHITE, self.width / 2, self.height / 3.5)
             self.draw_text("MUSIC",
-                           22, WHITE, self.width / 3, self.height / 2)
+                           48, WHITE, self.width / 3, self.height / 2)
             self.draw_text("FULLSCREEN",
-                           22, WHITE, self.width / 3, int(self.height / 1.5))
+                           48, WHITE, self.width / 3, int(self.height / 1.5))
             
             #Create ON/OFF buttons
             on_off_button = pygame.Rect(
