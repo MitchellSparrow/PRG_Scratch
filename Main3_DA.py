@@ -41,6 +41,7 @@ class run_scratch:
         self.clock = pygame.time.Clock()
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
+        self.flash_count = 0
 
         if self.play_music:
             pygame.mixer.music.play(
@@ -53,7 +54,7 @@ class run_scratch:
         self.run()
 
     def show_home_screen(self):
-
+        
         self.screen.blit(self.background, (0, 0))
         rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
@@ -82,20 +83,29 @@ class run_scratch:
                        self.width/2, self.height*7/10)
 
         self.click = False
+        self.flash_count += 10
         
         if self.fullscreen:
             self.draw_text(TITLE, 72, WHITE,
                        self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
                        48, WHITE, self.width / 2, self.height / 3)
-            self.draw_text("Press space to start playing!",
+            if self.flash_count % 120 == 0:
+                self.draw_text("Press space to start playing!",
+                       48, BLACK, self.width / 2, self.height / 1.8)
+            else:
+                self.draw_text("Press space to start playing!",
                        48, WHITE, self.width / 2, self.height / 1.8)
         else:
             self.draw_text(TITLE, 48, WHITE,
                        self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
                        22, WHITE, self.width / 2, self.height / 3)  
-            self.draw_text("Press space to start playing!",
+            if self.flash_count % 120 == 0:
+                self.draw_text("Press space to start playing!",
+                       22, BLACK, self.width / 2, self.height / 1.8)
+            else:
+                self.draw_text("Press space to start playing!",
                        22, WHITE, self.width / 2, self.height / 1.8)
             
         pygame.display.flip()
@@ -110,7 +120,8 @@ class run_scratch:
             
             self.rocket.Movement(self.width, self.height) 
             self.rocket.Draw(self.screen)
-
+            self.rocket.DrawRect(self.screen)
+            
             pygame.display.update()
             self.clock.tick(FPS)
 

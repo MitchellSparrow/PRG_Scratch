@@ -17,7 +17,7 @@ class Rocket:
 
     def __init__(self, width, height):
         self.image = self.Rocket_R_scaled
-        # Start position of Rocket
+        # Start position of Rockets
         self.width = width
         self.height = height
         self.x_pos = 0.5 * width
@@ -25,7 +25,7 @@ class Rocket:
 
     def Movement(self, width, height):
         #Rocket speeds as a proportion of window width/height
-        self.Rocket_y_speed = height/200
+        self.Rocket_y_speed = height/180
         self.Rocket_x_speed = width/120
         
         # Movement of rocket corresponding to key pressed
@@ -49,3 +49,9 @@ class Rocket:
     def Draw(self, surface):
         # Drawing sprite onto surface at current position
         surface.blit(self.image, (self.x_pos, self.y_pos))
+
+        
+    def DrawRect(self, surface):
+        self.topleft = (self.x_pos, self.y_pos)
+        self.Rect = self.image.get_rect(topleft=(self.topleft))
+        pygame.draw.rect(surface, BLACK, self.Rect, 2)
