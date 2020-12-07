@@ -90,7 +90,7 @@ class run_scratch:
                        self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
                        48, WHITE, self.width / 2, self.height / 3)
-            if self.flash_count % 50 == 0:
+            if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
                        48, BLACK, self.width / 2, self.height / 1.8)
             else:
@@ -101,7 +101,7 @@ class run_scratch:
                        self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
                        22, WHITE, self.width / 2, self.height / 3)  
-            if self.flash_count % 50 == 0:
+            if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
                        22, BLACK, self.width / 2, self.height / 1.8)
             else:
