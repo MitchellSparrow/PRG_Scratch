@@ -146,6 +146,59 @@ class run_scratch:
         if score > self.highscore:
             self.highscore = score
 
+    def game_over(self):
+        running = True
+
+        while running:
+            self.screen.blit(self.background, (0, 0))
+            rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
+            self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
+            mx, my = pygame.mouse.get_pos()
+
+            self.click = False
+            self.flash_count += 10
+
+            if self.fullscreen:
+                self.draw_text("GAME OVER", 72, WHITE,
+                               self.width / 2, self.height / 5)
+                self.draw_text("Press ESC to return to home",
+                               22, WHITE, self.width / 2, self.height / 3)
+                if self.flash_count % 120 == 0:
+                    self.draw_text("Press space to try again!",
+                                   48, BLACK, self.width / 2, self.height / 1.8)
+                else:
+                    self.draw_text("Press space to try again!",
+                                   48, WHITE, self.width / 2, self.height / 1.8)
+            else:
+                self.draw_text("GAME OVER", 48, WHITE,
+                               self.width / 2, self.height / 5)
+                self.draw_text("Press ESC to return to home",
+                               22, WHITE, self.width / 2, self.height / 3)
+                if self.flash_count % 120 == 0:
+                    self.draw_text("Press space to try again!",
+                                   22, BLACK, self.width / 2, self.height / 1.8)
+                else:
+                    self.draw_text("Press space to try again!",
+                                   22, WHITE, self.width / 2, self.height / 1.8)
+
+            pygame.display.update()
+            self.clock.tick(FPS)
+
+            e = pygame.event.poll()
+            if e.type == pygame.QUIT:
+                self.exit()
+                running = False
+                self.quit = True
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    running = False
+            if e.type == pygame.VIDEORESIZE:
+                if self.fullscreen is not True:
+                    self.width = e.w
+                    self.height = e.h
+                    self.screen = pygame.display.set_mode(
+                        (e.w, e.h), pygame.RESIZABLE)
+
     def tutorial(self):
         running = True
         self.Trocket.reset(self.width / 2.1, self.height / 1.5)
@@ -316,7 +369,8 @@ class run_scratch:
                     self.click = True
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_SPACE:
-                    self.play()
+                    # self.play()
+                    self.game_over()
             if e.type == pygame.VIDEORESIZE:
                 if self.fullscreen is not True:
                     self.width = e.w
