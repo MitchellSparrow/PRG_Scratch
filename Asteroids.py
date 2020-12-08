@@ -50,7 +50,7 @@ class Asteroid:
             self.x_pos = width
             self.y_pos = random.randrange(0, int(height - self.image.get_height()))
         
-        if self.points % 10 == 0:
+        if self.points % 5 == 0:
             self.difficulty += 0.001
         
 
