@@ -4,7 +4,7 @@ import platform
 from globals import *
 from rocket import Rocket
 import pickle
-
+from asteroids4 import Asteroid1
 
 class run_scratch:
 
@@ -50,6 +50,8 @@ class run_scratch:
         self.flash_count = 0
         self.rocket = Rocket(self.width, self.height)
         self.Trocket = Rocket(self.width, self.height)
+        
+        self.Asteroid1 = Asteroid1(self.width, self.height)
 
         # Music initialisation
         if self.play_music:
@@ -143,6 +145,10 @@ class run_scratch:
             self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
+            
+            self.Asteroid1.Movement()
+            self.Asteroid1.Draw(self.screen)
+            self.Asteroid1.DrawRect(self.screen)
 
             pygame.display.update()
             self.clock.tick(FPS)

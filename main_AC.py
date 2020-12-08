@@ -3,10 +3,8 @@ import os
 import platform
 from globals import *
 from Rocket2 import Rocket
+from asteroids4 import Asteroid1
 import pickle
-from asteroids3 import Asteroid, Asteroid1, Asteroid2, Asteroid3
-import random
-
 
 
 class run_scratch:
@@ -53,15 +51,11 @@ class run_scratch:
         self.rocket = Rocket(self.width, self.height)
         self.Trocket = Rocket(self.width, self.height)
         
-        
-        #Initialise Asteroid Class
-        self.Asteroid1 = Asteroid1(self)
-        self.Asteroid2 = Asteroid2(self)
-        self.Asteroid3 = Asteroid3(self)
+        self.Asteroid1 = Asteroid1(self.width, self.height)
         
         # Run game
         self.run()
-        
+
     def show_home_screen(self):
         
         self.screen.blit(self.background, (0, 0))
@@ -118,9 +112,7 @@ class run_scratch:
                        22, WHITE, self.width / 2, self.height / 1.8)
             
         pygame.display.flip()
-    
-    pygame.time.set_timer(USEREVENT+1, 5000)
-     
+
     def play(self):
         running = True
 
@@ -132,13 +124,10 @@ class run_scratch:
             self.rocket.Movement(self.width, self.height) 
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
-            
-            #Add asteroid movement draw, draw rect
-#            self.Asteroid1.Movement(self)
- #           self.Asteroid1.DrawRect(self.screen)
-  #          self.Asteroid1.DrawRect(self.screen)
-            
-            
+                
+            self.Asteroid1.Movement()
+            self.Asteroid1.Draw(self.screen)
+            self.Asteroid1.DrawRect(self.screen)
             
             pygame.display.update()
             self.clock.tick(FPS)
@@ -157,22 +146,7 @@ class run_scratch:
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
-                
-                if event.type == USEREVENT+1:
-                    r = random.randrange(0,3)
-                    if r == 0:
-                            self.Asteroid1.Movement(self)
-                            self.Asteroid1.draw(self.screen)
-                            self.Asteroid1.DrawRect(self.screen)
-                    elif r == 1:
-                            self.Asteroid2.Movement(self)
-                            self.Asteroid2.draw(self.screen)                            
-                            self.Asteroid2.DrawRect(self.screen)
-                    elif r == 3:
-                            self.Asteroid3.Movement(self)
-                            self.Asteroid3.draw(self.screen)
-                            self.Asteroid3.DrawRect(self.screen)
-                            
+
         # after the game finishes, update the high score if needed
         score = 0
         if score > self.highscore:
