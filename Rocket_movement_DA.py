@@ -5,7 +5,7 @@ import numpy as np
 # Rocket object functions
 
 
-class Rocket:
+class Rocket(object):
     # Load rocket image(s) and scale
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
     Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")

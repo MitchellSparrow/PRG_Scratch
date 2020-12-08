@@ -65,10 +65,11 @@ class run_scratch:
 
         button_1 = pygame.Rect(
             self.width/2-75, self.height*4/5 - 12.5, 150, 50)
-
         button_2 = pygame.Rect(
-            self.width/2-75, self.height*7/10 - 12.5, 150, 50)
-
+            self.width/3-75, self.height*4/5 - 12.5, 150, 50)
+        button_3 = pygame.Rect(
+            2*self.width/3-75, self.height*4/5 - 12.5, 150, 50)
+        
         if button_1.collidepoint((mx, my)):
             if self.click:
                 self.settings()
@@ -76,15 +77,23 @@ class run_scratch:
         if button_2.collidepoint((mx, my)):
             if self.click:
                 self.tutorial()
-
+                
+        if button_3.collidepoint((mx, my)):
+            if self.click:
+                self.quit = True
+                self.exit()
+                
         pygame.draw.rect(self.screen, LIGHTBLUE, button_1, border_radius=20)
         pygame.draw.rect(self.screen, LIGHTBLUE, button_2, border_radius=20)
-
+        pygame.draw.rect(self.screen, LIGHTBLUE, button_3, border_radius=20)
+        
         self.draw_text("Settings", 20, WHITE,
                        self.width/2, self.height*4/5)
         self.draw_text("Tutorial", 20, WHITE,
-                       self.width/2, self.height*7/10)
-
+                       self.width/3, self.height*4/5)
+        self.draw_text("Quit", 20, WHITE,
+                       2*self.width/3, self.height*4/5)
+        
         self.click = False
         self.flash_count += 10
 
