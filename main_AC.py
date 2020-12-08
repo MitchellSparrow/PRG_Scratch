@@ -120,7 +120,7 @@ class run_scratch:
         pygame.display.flip()
     
     pygame.time.set_timer(USEREVENT+1, 5000)
-    
+     
     def play(self):
         running = True
 
