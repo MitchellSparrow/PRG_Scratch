@@ -3,8 +3,9 @@ import os
 import platform
 from globals import *
 from rocket import Rocket
-import pickle
 from Asteroids import Asteroid
+import pickle
+
 
 class run_scratch:
 
@@ -48,11 +49,8 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
         self.flash_count = 0
-        self.rocket = Rocket(self.width, self.height)
-        self.Trocket = Rocket(self.width, self.height)
-        
-        self.Asteroid1 = Asteroid1(self.width, self.height)
 
+        
         # Music initialisation
         if self.play_music:
             pygame.mixer.music.play(
@@ -127,29 +125,46 @@ class run_scratch:
             else:
                 self.draw_text("Press space to start playing!",
                                22, WHITE, self.width / 2, self.height / 1.8)
+        
+        #Initialise Rockets and Asteroids
+        self.rocket = Rocket(self.width, self.height, self.fullscreen)
+        self.Trocket = Rocket(self.width, self.height, self.fullscreen)
 
+        self.asteroid = Asteroid(self.width, self.height)
+        self.asteroid2 = Asteroid(self.width, self.height)
+        
         # Update display
         pygame.display.flip()
 
     def play(self):
+               
         running = True
 
         # Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
 
+        
         while running:
             self.screen.blit(self.background, (0, 0))
+            self.draw_text(f"Score: {self.asteroid.points}",
+                           30, WHITE, 55, 10)
 
-            # Rocket adjustments each game tick
-            key = pygame.key.get_pressed()
+            # Rocket / Asteroids movements each game tick
+
             self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
-            
-            self.Asteroid1.Movement()
-            self.Asteroid1.Draw(self.screen)
-            self.Asteroid1.DrawRect(self.screen)
 
+            self.asteroid.Movement(self.width, self.height)
+            self.asteroid.Draw(self.screen)
+            self.asteroid.DrawRect(self.screen)
+            self.asteroid.checkCollision(self.rocket)
+
+            self.asteroid2.Movement(self.width, self.height)
+            self.asteroid2.Draw(self.screen)
+            self.asteroid2.DrawRect(self.screen)
+            self.asteroid2.checkCollision(self.rocket)
+            
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -179,10 +194,18 @@ class run_scratch:
                         self.play_again = False
                         # self.lost = True
 
+            if self.asteroid.collision or self.asteroid2.collision:
+                if self.asteroid.points > self.highscore:
+                    self.highscore = self.asteroid.points
+                self.game_over()
+                if not self.play_again:
+                    running = False
+                self.rocket.reset(self.width / 2, self.height / 2)
+                self.asteroid.reset(self.width, self.height / 2)
+                self.asteroid2.reset(self.width, self.height / 2)
+                self.play_again = False
+
         # After the game finishes, update the high score if needed
-        score = 0
-        if score > self.highscore:
-            self.highscore = score
 
     def game_over(self):
         running = True
@@ -371,14 +394,19 @@ class run_scratch:
                 if self.click:
                     self.fullscreen = not self.fullscreen
                     if self.fullscreen is True:
-                        # Load correct resolution background, update local variables and set to fullscreen mode
-                        bg_path = "./Images/Backgrounds/Space_Background_" + \
-                            str(self.max_height) + ".jpg"
+                        try: 
+                            # Load correct resolution background, update local variables and set to fullscreen mode
+                            bg_path = "./Images/Backgrounds/Space_Background_" + \
+                                str(self.max_height) + ".jpg"
+                        except:
+                            #If cant find resolution, use 1080 px height
+                            bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                         self.background = pygame.image.load(bg_path)
                         self.width = self.max_width
                         self.height = self.max_height
                         self.screen = pygame.display.set_mode(
                             (self.width, self.height), pygame.FULLSCREEN)
+                            
                     else:
                         # Load smaller background, set windo to default size
                         bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
