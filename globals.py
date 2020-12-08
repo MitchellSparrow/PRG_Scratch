@@ -18,10 +18,11 @@ YELLOW = (255, 255, 0)
 LIGHTBLUE = (0, 155, 155)
 
 
-#Asteroid settings
+# Asteroid settings
 Aminsize = 200
 Amaxsize = 300
 
 FPS = 60
 FONT_NAME = 'arial'
 CLICK = False
+DIFFICULTY = 1
