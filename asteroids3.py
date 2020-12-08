@@ -12,10 +12,10 @@ class Asteroid():
     
     def __init__(self):
         self.image = self.Asteroid_scaled
-        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(100, HEIGHT)))
+        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(0, HEIGHT)))
         
     def Movement(self):
-        self.x -= difficulty                  
+        self.rect.move_ip(-difficulty, 0)                  
         
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
@@ -33,16 +33,16 @@ class Asteroid():
 class Asteroid1(Asteroid):
     def __init__(self):
         self.image = self.Asteroid1_scaled
-        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(100, HEIGHT)))
+        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(0, HEIGHT)))
         
        
 class Asteroid2(Asteroid):
     def __init__ (self):
         self.image = self.Asteroid2_scaled
-        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(100, HEIGHT)))
+        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(0, HEIGHT)))
 
                
 class Asteroid3(Asteroid):
     def __init__(self):
         self.image = self.Asteroid3_scaled
-        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(100, HEIGHT)))
+        self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(0, HEIGHT)))

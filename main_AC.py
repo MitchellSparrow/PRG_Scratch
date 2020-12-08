@@ -7,7 +7,7 @@ import pickle
 from asteroids3 import Asteroid, Asteroid1, Asteroid2, Asteroid3
 import random
 
-pygame.time.set_timer(USEREVENT+1, 1000)
+
 
 class run_scratch:
     click = False
@@ -61,7 +61,7 @@ class run_scratch:
         
         # Run game
         self.run()
-
+        
     def show_home_screen(self):
         
         self.screen.blit(self.background, (0, 0))
@@ -119,6 +119,7 @@ class run_scratch:
             
         pygame.display.flip()
     
+    pygame.time.set_timer(USEREVENT+1, 5000)
     
     def play(self):
         running = True
@@ -133,9 +134,9 @@ class run_scratch:
             self.rocket.DrawRect(self.screen)
             
             #Add asteroid movement draw, draw rect
-            self.Asteroid1.Movement(self.screen)
-            self.Asteroid1.draw(self.screen)
-            self.Asteroid1.DrawRect(self.screen)
+#            self.Asteroid1.Movement(self)
+ #           self.Asteroid1.DrawRect(self.screen)
+  #          self.Asteroid1.DrawRect(self.screen)
             
             
             
@@ -160,11 +161,17 @@ class run_scratch:
                 if event.type == USEREVENT+1:
                     r = random.randrange(0,3)
                     if r == 0:
-                            Asteroid.draw(Asteroid1)
+                            self.Asteroid1.Movement(self)
+                            self.Asteroid1.draw(self.screen)
+                            self.Asteroid1.DrawRect(self.screen)
                     elif r == 1:
-                            Asteroid.draw(Asteroid2)
+                            self.Asteroid2.Movement(self)
+                            self.Asteroid2.draw(self.screen)                            
+                            self.Asteroid2.DrawRect(self.screen)
                     elif r == 3:
-                            Asteroid.draw(Asteroid3)
+                            self.Asteroid3.Movement(self)
+                            self.Asteroid3.draw(self.screen)
+                            self.Asteroid3.DrawRect(self.screen)
                             
         # after the game finishes, update the high score if needed
         score = 0
