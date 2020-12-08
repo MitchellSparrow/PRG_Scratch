@@ -15,7 +15,7 @@ class Asteroid():
         self.rect = self.image.get_rect(topleft = (WIDTH, random.randrange(100, HEIGHT)))
         
     def Movement(self):
-        self.x -= 10                  
+        self.x -= difficulty                  
         
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
