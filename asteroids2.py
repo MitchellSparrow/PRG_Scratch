@@ -16,16 +16,21 @@ class Asteroid():
         self.image = self.Asteroid_scaled
         self.rect = self.image.get_rect()
         Asteroid_rect.x = WIDTH
-        Asteroid_rect.y = random.randrange(100,900)
+        Asteroid_rect.y = random.randrange(100,WIDTH)
         
     def Movement(self):
         self.x_pos -= difficulty                  
-            
+        
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
-
+        
+    def DrawRect(self, surface):
+        self.topleft = (self.x_pos, self.y_pos)
+        self.rect = self.image.get_rect(topleft= (self.topleft))
+        pygame.draw.rect(surface, BLACK, self.rect, 2)
+        
     def checkCollision(sprite1, sprite2):
-        col = asteroid.rect.colliderect(rocket.rect)
+        col = Asteroid.rect.colliderect(rocket.Rect)
         if col == True:
             pygame.quit()
 
@@ -34,22 +39,22 @@ class Asteroid1(Asteroid):
         self.image = Asteroid1_scaled
         self.rect = self.image.get_rect()
         Asteroid1_rect.x = WIDTH
-        Asteroid1_rect.y = random.randrange(100,900)
+        Asteroid1_rect.y = random.randrange(100,WIDTH)
         
     def checkCollision(sprite1, sprite2):
-        col = Asteroid1.rect.colliderect(rocket.rect)
+        col = Asteroid1.rect.colliderect(rocket.Rect)
         if col == True:
             pygame.quit()
-            
+       
 class Asteroid2(Asteroid):
     def __init__ (self, x, y, width, height):
         self.image = Asteroid2_scaled
         self.rect = self.image.get_rect()
         asteroid2_rect.x = WIDTH
-        asteroid2_rect.y = random.randrange(100,900)
+        asteroid2_rect.y = random.randrange(100,WIDTH)
         
     def checkCollision(sprite1, sprite2):
-        col = Asteroid2.rect.colliderect(rocket.rect)
+        col = Asteroid2.rect.colliderect(rocket.Rect)
         if col == True:
             pygame.quit()
                
@@ -58,10 +63,10 @@ class Asteroid3(Asteroid):
         self.image = Asteroid3_scaled
         self.rect = self.image.get_rect()
         asteroid3_rect.x = WIDTH
-        asteroid3_rect.y = random.randrange(100,900)
+        asteroid3_rect.y = random.randrange(100,WIDTH)
         
     def checkCollision(sprite1, sprite2):
-        col = Asteroid3.rect.colliderect(rocket.rect)
+        col = Asteroid3.rect.colliderect(rocket.Rect)
         if col == True:
             pygame.quit()
               
@@ -82,7 +87,7 @@ while run:
             Asteroid.draw(Asteroid1)
         elif r == 1:
             Asteroid.draw(Asteroid2)
-        if r == 3:
+        elif r == 3:
             Asteroid.draw(Asteroid3)
     if event.type == USEREVENT+3:
         difficulty +=5
