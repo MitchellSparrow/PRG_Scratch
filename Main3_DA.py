@@ -13,7 +13,9 @@ class run_scratch:
     height = 600
     width = 1000
     fullscreen = False
+    play_again = False
     quit = False
+    count = 0
 
     def __init__(self):
         # Initialize pygame
@@ -30,8 +32,9 @@ class run_scratch:
             file.close()
         except FileNotFoundError:
             pass
-        
-        self.max_width, self.max_height = pygame.display.Info().current_w, pygame.display.Info().current_h
+
+        self.max_width, self.max_height = pygame.display.Info(
+        ).current_w, pygame.display.Info().current_h
         self.screen = pygame.display.set_mode(
             (self.width, self.height), pygame.RESIZABLE)
         self.background = pygame.image.load(
@@ -54,7 +57,7 @@ class run_scratch:
         self.run()
 
     def show_home_screen(self):
-        
+
         self.screen.blit(self.background, (0, 0))
         rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
@@ -62,7 +65,7 @@ class run_scratch:
 
         button_1 = pygame.Rect(
             self.width/2-75, self.height*4/5 - 12.5, 150, 50)
-        
+
         button_2 = pygame.Rect(
             self.width/2-75, self.height*7/10 - 12.5, 150, 50)
 
@@ -73,10 +76,10 @@ class run_scratch:
         if button_2.collidepoint((mx, my)):
             if self.click:
                 self.tutorial()
-                
+
         pygame.draw.rect(self.screen, LIGHTBLUE, button_1, border_radius=20)
         pygame.draw.rect(self.screen, LIGHTBLUE, button_2, border_radius=20)
-        
+
         self.draw_text("Settings", 20, WHITE,
                        self.width/2, self.height*4/5)
         self.draw_text("Tutorial", 20, WHITE,
@@ -84,44 +87,44 @@ class run_scratch:
 
         self.click = False
         self.flash_count += 10
-        
+
         if self.fullscreen:
             self.draw_text(TITLE, 72, WHITE,
-                       self.width / 2, self.height / 5)
+                           self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
-                       48, WHITE, self.width / 2, self.height / 3)
+                           48, WHITE, self.width / 2, self.height / 3)
             if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
-                       48, BLACK, self.width / 2, self.height / 1.8)
+                               48, BLACK, self.width / 2, self.height / 1.8)
             else:
                 self.draw_text("Press space to start playing!",
-                       48, WHITE, self.width / 2, self.height / 1.8)
+                               48, WHITE, self.width / 2, self.height / 1.8)
         else:
             self.draw_text(TITLE, 48, WHITE,
-                       self.width / 2, self.height / 5)
+                           self.width / 2, self.height / 5)
             self.draw_text(f"High Score: {self.highscore}",
-                       22, WHITE, self.width / 2, self.height / 3)  
+                           22, WHITE, self.width / 2, self.height / 3)
             if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
-                       22, BLACK, self.width / 2, self.height / 1.8)
+                               22, BLACK, self.width / 2, self.height / 1.8)
             else:
                 self.draw_text("Press space to start playing!",
-                       22, WHITE, self.width / 2, self.height / 1.8)
-            
+                               22, WHITE, self.width / 2, self.height / 1.8)
+
         pygame.display.flip()
 
     def play(self):
         running = True
-
+        self.rocket.reset(self.width / 2, self.height / 2)
         while running:
             self.screen.blit(self.background, (0, 0))
 
             key = pygame.key.get_pressed()
-            
-            self.rocket.Movement(self.width, self.height) 
+
+            self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
-            
+
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -140,29 +143,97 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
 
+                # similate game over
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_BACKSPACE:
+                        self.game_over()
+                        if not self.play_again:
+                            running = False
+                        self.rocket.reset(self.width / 2, self.height / 2)
+                        self.play_again = False
+                        # self.lost = True
+
         # after the game finishes, update the high score if needed
         score = 0
         if score > self.highscore:
             self.highscore = score
 
-    def tutorial(self):
+    def game_over(self):
         running = True
 
         while running:
-            #Background
+            self.screen.blit(self.background, (0, 0))
+            rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
+            self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
+            mx, my = pygame.mouse.get_pos()
+
+            self.click = False
+            self.flash_count += 10
+
+            if self.fullscreen:
+                self.draw_text("GAME OVER", 72, WHITE,
+                               self.width / 2, self.height / 5)
+                self.draw_text("Press ESC to return to home",
+                               22, WHITE, self.width / 2, self.height / 3)
+                if self.flash_count % 120 == 0:
+                    self.draw_text("Press space to try again!",
+                                   48, BLACK, self.width / 2, self.height / 1.8)
+                else:
+                    self.draw_text("Press space to try again!",
+                                   48, WHITE, self.width / 2, self.height / 1.8)
+            else:
+                self.draw_text("GAME OVER", 48, WHITE,
+                               self.width / 2, self.height / 5)
+                self.draw_text("Press ESC to return to home",
+                               22, WHITE, self.width / 2, self.height / 3)
+                if self.flash_count % 120 == 0:
+                    self.draw_text("Press space to try again!",
+                                   22, BLACK, self.width / 2, self.height / 1.8)
+                else:
+                    self.draw_text("Press space to try again!",
+                                   22, WHITE, self.width / 2, self.height / 1.8)
+
+            pygame.display.update()
+            self.clock.tick(FPS)
+
+            e = pygame.event.poll()
+            if e.type == pygame.QUIT:
+                self.exit()
+                running = False
+                self.quit = True
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    running = False
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_SPACE:
+                    running = False
+                    self.play_again = True
+            if e.type == pygame.VIDEORESIZE:
+                if self.fullscreen is not True:
+                    self.width = e.w
+                    self.height = e.h
+                    self.screen = pygame.display.set_mode(
+                        (e.w, e.h), pygame.RESIZABLE)
+
+    def tutorial(self):
+        running = True
+        self.Trocket.reset(self.width / 2.1, self.height / 1.5)
+
+        while running:
+            # Background
             self.screen.blit(self.background, (0, 0))
 
-            #Tutorial rocket
+            # Tutorial rocket
             key = pygame.key.get_pressed()
-            self.Trocket.Movement(self.width, self.height) 
+            self.Trocket.Movement(self.width, self.height)
             self.Trocket.Draw(self.screen)
 
-            #Tutorial screen text
+            # Tutorial screen text
             if self.fullscreen:
                 self.draw_text("Tutorial",
                                72, WHITE, self.width / 2, self.height / 7)
                 self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
-                               48, WHITE, self.width / 2, 2*self.height / 7 )
+                               48, WHITE, self.width / 2, 2*self.height / 7)
                 self.draw_text("Avoid the asteroids for as long as possible",
                                48, WHITE, self.width / 2, 3*self.height / 7)
                 self.draw_text("Your score increases over time, try to beat the high score!",
@@ -171,15 +242,15 @@ class run_scratch:
                 self.draw_text("Tutorial",
                                48, WHITE, self.width / 2, self.height / 7)
                 self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
-                               22, WHITE, self.width / 2, 2*self.height / 7 )
+                               22, WHITE, self.width / 2, 2*self.height / 7)
                 self.draw_text("Avoid the asteroids for as long as possible",
                                22, WHITE, self.width / 2, 3*self.height / 7)
                 self.draw_text("Your score increases over time, try to beat the high score!",
                                22, WHITE, self.width / 2, 4*self.height / 7)
-            
+
             pygame.display.update()
             self.clock.tick(FPS)
-     
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
@@ -194,10 +265,10 @@ class run_scratch:
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
-    
+
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
-        #font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
+        # font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
@@ -220,15 +291,15 @@ class run_scratch:
                            48, WHITE, self.width / 3, self.height / 2)
             self.draw_text("FULLSCREEN",
                            48, WHITE, self.width / 3, int(self.height / 1.5))
-            
-            #Create ON/OFF buttons
+
+            # Create ON/OFF buttons
             on_off_button = pygame.Rect(
                 self.width*2/3 - 30, self.height/2 - 7.5, 60, 40)
-            
+
             on_off_button2 = pygame.Rect(
                 self.width*2/3 - 30, int(self.height/1.5 - 7.5), 60, 40)
-            
-            #MUSIC option
+
+            # MUSIC option
             if self.play_music:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button, border_radius=20)
@@ -248,8 +319,8 @@ class run_scratch:
                     else:
                         pygame.mixer.music.play(-1)
                         self.play_music = True
-            
-           #FULLSCREEN option - Cannot handle dual monitors with different resolutions
+
+           # FULLSCREEN option - Cannot handle dual monitors with different resolutions
             if self.fullscreen:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button2, border_radius=20)
@@ -262,20 +333,22 @@ class run_scratch:
                                self.width*2/3, self.height/1.5)
 
             if on_off_button2.collidepoint((mx, my)):
-                if self.click:                        
+                if self.click:
                     self.fullscreen = not self.fullscreen
                     if self.fullscreen is True:
-                        bg_path = "./Images/Backgrounds/Space_Background_" + str(self.max_height) + ".jpg"
+                        bg_path = "./Images/Backgrounds/Space_Background_" + \
+                            str(self.max_height) + ".jpg"
                         self.background = pygame.image.load(bg_path)
                         self.width = self.max_width
                         self.height = self.max_height
-                        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+                        self.screen = pygame.display.set_mode(
+                            (self.width, self.height), pygame.FULLSCREEN)
                     else:
                         bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                         self.background = pygame.image.load(bg_path)
-                        self.screen = pygame.display.set_mode((1000, 600), pygame.RESIZABLE)
+                        self.screen = pygame.display.set_mode(
+                            (1000, 600), pygame.RESIZABLE)
 
-            
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
@@ -301,7 +374,9 @@ class run_scratch:
     def run(self):
 
         while not self.quit:
+
             self.show_home_screen()
+
             self.clock.tick(FPS)
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
