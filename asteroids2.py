@@ -15,17 +15,17 @@ class Asteroid():
     def __init__(self, x, y, width, height):
         self.image = self.Asteroid_scaled
         self.rect = self.image.get_rect()
-        Asteroid_rect.x = WIDTH
-        Asteroid_rect.y = random.randrange(100,WIDTH)
+        self.x = WIDTH
+        self.y = random.randrange(100,HEIGHT)
         
     def Movement(self):
-        self.x_pos -= difficulty                  
+        self.x -= difficulty                  
         
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
         
     def DrawRect(self, surface):
-        self.topleft = (self.x_pos, self.y_pos)
+        self.topleft = (self.x, self.y)
         self.rect = self.image.get_rect(topleft= (self.topleft))
         pygame.draw.rect(surface, BLACK, self.rect, 2)
         
@@ -38,8 +38,8 @@ class Asteroid1(Asteroid):
     def __init__(self, x, y, width, height):
         self.image = Asteroid1_scaled
         self.rect = self.image.get_rect()
-        Asteroid1_rect.x = WIDTH
-        Asteroid1_rect.y = random.randrange(100,HEIGHT)
+        self.x = WIDTH
+        self.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid1.rect.colliderect(rocket.Rect)
@@ -50,8 +50,8 @@ class Asteroid2(Asteroid):
     def __init__ (self, x, y, width, height):
         self.image = Asteroid2_scaled
         self.rect = self.image.get_rect()
-        asteroid2_rect.x = WIDTH
-        asteroid2_rect.y = random.randrange(100,HEIGHT)
+        self.x = WIDTH
+        self.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid2.rect.colliderect(rocket.Rect)
@@ -62,8 +62,8 @@ class Asteroid3(Asteroid):
     def __init__(self, x, y, width, height):
         self.image = Asteroid3_scaled
         self.rect = self.image.get_rect()
-        asteroid3_rect.x = WIDTH
-        asteroid3_rect.y = random.randrange(100,HEIGHT)
+        asteroid3.x = WIDTH
+        asteroid3.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid3.rect.colliderect(rocket.Rect)
