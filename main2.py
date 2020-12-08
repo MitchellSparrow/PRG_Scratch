@@ -13,7 +13,9 @@ class run_scratch:
     height = 600
     width = 1000
     fullscreen = False
+    play_again = False
     quit = False
+    count = 0
 
     def __init__(self):
         # Initialize pygame
@@ -141,6 +143,16 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
 
+                # similate game over
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_BACKSPACE:
+                        self.game_over()
+                        if not self.play_again:
+                            running = False
+                        self.rocket.reset(self.width / 2, self.height / 2)
+                        self.play_again = False
+                        # self.lost = True
+
         # after the game finishes, update the high score if needed
         score = 0
         if score > self.highscore:
@@ -192,6 +204,10 @@ class run_scratch:
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
                     running = False
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_SPACE:
+                    running = False
+                    self.play_again = True
             if e.type == pygame.VIDEORESIZE:
                 if self.fullscreen is not True:
                     self.width = e.w
@@ -252,7 +268,7 @@ class run_scratch:
 
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
-        #font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
+        # font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
@@ -358,7 +374,9 @@ class run_scratch:
     def run(self):
 
         while not self.quit:
+
             self.show_home_screen()
+
             self.clock.tick(FPS)
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
@@ -369,8 +387,7 @@ class run_scratch:
                     self.click = True
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_SPACE:
-                    # self.play()
-                    self.game_over()
+                    self.play()
             if e.type == pygame.VIDEORESIZE:
                 if self.fullscreen is not True:
                     self.width = e.w
