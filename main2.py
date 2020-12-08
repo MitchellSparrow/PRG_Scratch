@@ -7,6 +7,8 @@ import pickle
 
 
 class run_scratch:
+    
+    #Default settings
     click = False
     play_music = True
     highscore = 0
@@ -32,7 +34,8 @@ class run_scratch:
             file.close()
         except FileNotFoundError:
             pass
-
+        
+        #Initialise variables / Images / Clock 
         self.max_width, self.max_height = pygame.display.Info(
         ).current_w, pygame.display.Info().current_h
         self.screen = pygame.display.set_mode(
@@ -45,24 +48,26 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
         self.flash_count = 0
-
+        self.rocket = Rocket(self.width, self.height)
+        self.Trocket = Rocket(self.width, self.height)
+        
+        #Music initialisation
         if self.play_music:
             pygame.mixer.music.play(
                 -1)
-
-        self.rocket = Rocket(self.width, self.height)
-        self.Trocket = Rocket(self.width, self.height)
 
         # Run game
         self.run()
 
     def show_home_screen(self):
 
+        #Background / Images on home screen
         self.screen.blit(self.background, (0, 0))
         rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
         mx, my = pygame.mouse.get_pos()
-
+        
+        #Home screen button options
         button_1 = pygame.Rect(
             self.width/2-75, self.height*4/5 - 12.5, 150, 50)
         button_2 = pygame.Rect(
@@ -94,6 +99,7 @@ class run_scratch:
         self.draw_text("Quit", 20, WHITE,
                        2*self.width/3, self.height*4/5)
         
+        #Fullscreen/Resizeable text on homescreen
         self.click = False
         self.flash_count += 10
 
@@ -120,16 +126,20 @@ class run_scratch:
                 self.draw_text("Press space to start playing!",
                                22, WHITE, self.width / 2, self.height / 1.8)
 
+        #Update display
         pygame.display.flip()
 
     def play(self):
         running = True
+        
+        #Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
+        
         while running:
             self.screen.blit(self.background, (0, 0))
 
+            #Rocket adjustments each game tick
             key = pygame.key.get_pressed()
-
             self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
@@ -137,6 +147,7 @@ class run_scratch:
             pygame.display.update()
             self.clock.tick(FPS)
 
+            #Event handling - 'X' button click, ESC press, resize window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
@@ -152,7 +163,7 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
 
-                # similate game over
+                # Simulate game over
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         self.game_over()
@@ -162,7 +173,7 @@ class run_scratch:
                         self.play_again = False
                         # self.lost = True
 
-        # after the game finishes, update the high score if needed
+        # After the game finishes, update the high score if needed
         score = 0
         if score > self.highscore:
             self.highscore = score
@@ -176,6 +187,7 @@ class run_scratch:
             self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
             mx, my = pygame.mouse.get_pos()
 
+            #Text on game over screen - Fullscreen / Resizeable
             self.click = False
             self.flash_count += 10
 
@@ -202,9 +214,11 @@ class run_scratch:
                     self.draw_text("Press space to try again!",
                                    22, WHITE, self.width / 2, self.height / 1.8)
 
+            #Update display
             pygame.display.update()
             self.clock.tick(FPS)
 
+            #Event handling - 'X' button click, ESC press, SPACE press, resize window
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
                 self.exit()
@@ -226,6 +240,7 @@ class run_scratch:
 
     def tutorial(self):
         running = True
+        #Reset rocket to original position
         self.Trocket.reset(self.width / 2.1, self.height / 1.5)
 
         while running:
@@ -256,10 +271,12 @@ class run_scratch:
                                22, WHITE, self.width / 2, 3*self.height / 7)
                 self.draw_text("Your score increases over time, try to beat the high score!",
                                22, WHITE, self.width / 2, 4*self.height / 7)
-
+            
+            #Update display
             pygame.display.update()
             self.clock.tick(FPS)
 
+            #Event handling - 'X' button click, ESC press, resize window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
@@ -288,8 +305,11 @@ class run_scratch:
         self.click = False
 
         while running:
-
+            
+            #Get mouse position
             mx, my = pygame.mouse.get_pos()
+            
+            #Draw Background and text to settings screen
             self.screen.blit(self.background, (0, 0))
 
             self.draw_text("SETTINGS", 48, WHITE,
@@ -345,6 +365,7 @@ class run_scratch:
                 if self.click:
                     self.fullscreen = not self.fullscreen
                     if self.fullscreen is True:
+                        #Load correct resolution background, update local variables and set to fullscreen mode
                         bg_path = "./Images/Backgrounds/Space_Background_" + \
                             str(self.max_height) + ".jpg"
                         self.background = pygame.image.load(bg_path)
@@ -353,15 +374,18 @@ class run_scratch:
                         self.screen = pygame.display.set_mode(
                             (self.width, self.height), pygame.FULLSCREEN)
                     else:
+                        #Load smaller background, set windo to default size
                         bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                         self.background = pygame.image.load(bg_path)
                         self.screen = pygame.display.set_mode(
                             (1000, 600), pygame.RESIZABLE)
 
+            #Update display
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
 
+            #Event handling - 'X' button click, ESC press, MOUSEBUTTON click, resize window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit()
@@ -384,9 +408,13 @@ class run_scratch:
 
         while not self.quit:
 
+            #Show home screen
             self.show_home_screen()
 
+            #Clock for home screen
             self.clock.tick(FPS)
+            
+            #Event handling - MOUSEBUTTON click, 'X' button click, SPACE press, resize window
             e = pygame.event.poll()
             if e.type == pygame.QUIT:
                 self.exit()
