@@ -3,6 +3,7 @@ import os
 import platform
 from globals import *
 from rocket_mitch import Rocket
+from asteroids_mitch import Asteroid
 import pickle
 
 
@@ -50,6 +51,8 @@ class run_scratch:
         self.flash_count = 0
         self.rocket = Rocket(self.width, self.height)
         self.Trocket = Rocket(self.width, self.height)
+
+        self.asteroid = Asteroid(self.width, self.height)
 
         # Music initialisation
         if self.play_music:
@@ -137,12 +140,20 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
+            self.draw_text(f"Score: {self.asteroid.points}",
+                           30, WHITE, 55, 10)
 
             # Rocket adjustments each game tick
-            key = pygame.key.get_pressed()
+
             self.rocket.Movement(self.width, self.height)
             self.rocket.Draw(self.screen)
             self.rocket.DrawRect(self.screen)
+
+            self.asteroid.Movement()
+            self.asteroid.Draw(self.screen)
+            self.asteroid.DrawRect(self.screen)
+
+            self.asteroid.checkCollision(self.rocket)
 
             pygame.display.update()
             self.clock.tick(FPS)
@@ -173,10 +184,17 @@ class run_scratch:
                         self.play_again = False
                         # self.lost = True
 
+            if self.asteroid.collision:
+                if self.asteroid.points > self.highscore:
+                    self.highscore = self.asteroid.points
+                self.game_over()
+                if not self.play_again:
+                    running = False
+                self.rocket.reset(self.width / 2, self.height / 2)
+                self.asteroid.reset(self.width, self.height / 2)
+                self.play_again = False
+
         # After the game finishes, update the high score if needed
-        score = 0
-        if score > self.highscore:
-            self.highscore = score
 
     def game_over(self):
         running = True

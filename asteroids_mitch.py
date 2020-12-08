@@ -4,25 +4,35 @@ from globals import *
 
 
 class Asteroid():
-    Asteroid1 = pygame.image.load("Images/Asteroids/Asteroid1.png")
-    Asteroid1_scaled = pygame.transform.scale(Asteroid1, ((int(
-        Asteroid1.get_width()*Asteroid_size), int(Asteroid1.get_height() * Asteroid_size))))
-    Asteroid2 = pygame.image.load("Images/Asteroids/Asteroid2.png")
-    Asteroid2_scaled = pygame.transform.scale(Asteroid2, ((int(
-        Asteroid2.get_width()*Asteroid_size), int(Asteroid2.get_height() * Asteroid_size))))
-    Asteroid3 = pygame.image.load("Images/Asteroids/Asteroid3.png")
-    Asteroid3_scaled = pygame.transform.scale(Asteroid3, ((int(
-        Asteroid3.get_width()*Asteroid_size), int(Asteroid3.get_height() * Asteroid_size))))
+    collision = False
+    points = 0
+    asteroid = pygame.image.load("Images/Asteroids/Asteroid1.png")
+    asteroid_scaled = pygame.transform.scale(asteroid, ((int(
+        asteroid.get_width()*Asteroid_size), int(asteroid.get_height() * Asteroid_size))))
 
     def __init__(self, width, height):
-        self.image = self.Asteroid1_scaled
-        self.rect = self.image.get_rect(
-            topleft=(WIDTH, random.randrange(0, HEIGHT)))
-        self.x_pos = 0.5 * width
-        self.y_pos = 0.5 * height
+        self.image = self.asteroid_scaled
+        self.width = width
+        self.height = height
+        self.x_pos = width
+        self.y_pos = random.randrange(0, int(height))
+
+    def reset(self, width, height):
+        self.points = 0
+        self.collision = False
+        self.image = self.asteroid_scaled
+        self.width = width
+        self.height = height
+        self.x_pos = width
+        self.y_pos = random.randrange(0, int(height))
 
     def Movement(self):
-        self.rect.move_ip(-difficulty, 0)
+        if self.x_pos > - self.asteroid.get_width():
+            self.x_pos -= difficulty
+        else:
+            self.points += 1
+            self.x_pos = self.width
+            self.y_pos = random.randrange(0, int(self.height))
 
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
@@ -35,25 +45,4 @@ class Asteroid():
     def checkCollision(self, rocket):
         col = self.rect.colliderect(rocket.Rect)
         if col == True:
-            pygame.quit()
-
-
-class Asteroid1(Asteroid):
-    def __init__(self):
-        self.image = self.Asteroid1_scaled
-        self.rect = self.image.get_rect(
-            topleft=(WIDTH, random.randrange(0, HEIGHT)))
-
-
-class Asteroid2(Asteroid):
-    def __init__(self):
-        self.image = self.Asteroid2_scaled
-        self.rect = self.image.get_rect(
-            topleft=(WIDTH, random.randrange(0, HEIGHT)))
-
-
-class Asteroid3(Asteroid):
-    def __init__(self):
-        self.image = self.Asteroid3_scaled
-        self.rect = self.image.get_rect(
-            topleft=(WIDTH, random.randrange(0, HEIGHT)))
+            self.collision = True

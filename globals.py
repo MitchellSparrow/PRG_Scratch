@@ -21,9 +21,9 @@ LIGHTBLUE = (0, 155, 155)
 Rocket_size = 0.5
 
 
-#Asteroid settings
-Asteroid_size = 0.5
-difficulty = 10 # Asteroid Speed
+# Asteroid settings
+Asteroid_size = 0.1
+difficulty = 10  # Asteroid Speed
 
 FPS = 60
 FONT_NAME = 'arial'
