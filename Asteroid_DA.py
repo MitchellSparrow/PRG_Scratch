@@ -23,11 +23,11 @@ class Asteroid:
         self.height = height
         self.x_pos = width
         self.y_pos = random.randrange(0, int(height - height/20))
-        self.difficulty = 1
+        self.difficulty = 0
 
     def reset(self, width, height):
-        self.points = 0
-        self.difficulty = 1
+        self.points = 1
+        self.difficulty = 0
         self.collision = False
         rnum = random.randint(0,2)
         self.image = self.asteroid_images[rnum]
@@ -35,12 +35,12 @@ class Asteroid:
         self.width = width
         self.height = height
         self.x_pos = width
-        self.y_pos = random.randrange(0, int(height - height/20))
+        self.y_pos = random.randrange(0, int(height - self.image.get_height()))
 
     def Movement(self, width, height):
-        Asteroid_speed = int(width/200)
+        Asteroid_speed = int(width/500) + self.difficulty
         if self.x_pos > - self.image.get_width():
-            self.x_pos -= self.difficulty * Asteroid_speed 
+            self.x_pos -= Asteroid_speed
         else:
             rnum= random.randint(0,2)
             rnum2 = random.randrange(Aminsize, Amaxsize)/1000
@@ -48,10 +48,10 @@ class Asteroid:
             self.image = pygame.transform.scale(self.image, ((int(self.image.get_width()*rnum2), int(self.image.get_height() *rnum2))))
             self.points += 1
             self.x_pos = width
-            self.y_pos = random.randrange(0, int(height - height/20))
+            self.y_pos = random.randrange(0, int(height - self.image.get_height()))
         
-        if self.points % 10 == 0:
-            self.difficulty += 0.01
+        if self.points % 5 == 0:
+            self.difficulty += 0.001
         
 
     def Draw(self, surface):

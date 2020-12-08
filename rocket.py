@@ -8,15 +8,21 @@ import numpy as np
 class Rocket:
     # Load rocket image(s) and scale
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
-    Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
-    Rocket_R_scaled = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
-    )*Rocket_size), int(Rocket_R.get_height()*Rocket_size)))
-    Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
-    Rocket_L_scaled = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
-    )*Rocket_size), int(Rocket_L.get_height()*Rocket_size)))
+    FS_Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
+    FS_Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
+    
+    Rocket_R = pygame.transform.scale(FS_Rocket_R, (int(FS_Rocket_R.get_width(
+                     )/2), int(FS_Rocket_R.get_height()/2))) 
+    Rocket_L = pygame.transform.scale(FS_Rocket_L, (int(FS_Rocket_L.get_width(
+                     )/2), int(FS_Rocket_L.get_height()/2))) 
 
-    def __init__(self, width, height):
-        self.image = self.Rocket_R_scaled
+    def __init__(self, width, height, fullscreen):
+        self.fullscreen = fullscreen
+        if self.fullscreen == True:
+            self.image = self.FS_Rocket_R
+        else:
+            self.image = self.Rocket_R
+            
         # Start position of Rockets
         self.width = width
         self.height = height
@@ -24,7 +30,11 @@ class Rocket:
         self.y_pos = 0.5 * height
 
     def reset(self, width, height):
-        self.image = self.Rocket_R_scaled
+        if self.fullscreen == True:
+                    self.image = self.FS_Rocket_R
+        else:
+            self.image = self.Rocket_R
+        # Start position of Rockets
         self.x_pos = width
         self.y_pos = height
 
@@ -45,11 +55,17 @@ class Rocket:
 
         if key[pygame.K_LEFT] and self.x_pos > (BORDER/2):
             self.x_pos -= self.Rocket_x_speed  # Move left by x unit
-            self.image = self.Rocket_L_scaled
+            if self.fullscreen == True:
+                self.image = self.FS_Rocket_L
+            else:
+                self.image = self.Rocket_L
 
         elif key[pygame.K_RIGHT] and self.x_pos < (width - (BORDER/2) - self.image.get_width()):
             self.x_pos += self.Rocket_x_speed  # Move right by x unit
-            self.image = self.Rocket_R_scaled
+            if self.fullscreen == True:
+                self.image = self.FS_Rocket_R
+            else:
+                self.image = self.Rocket_R
 
     def Draw(self, surface):
         # Drawing sprite onto surface at current position

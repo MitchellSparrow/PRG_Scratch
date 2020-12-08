@@ -4,7 +4,7 @@ import platform
 from globals import *
 from rocket import Rocket
 import pickle
-from asteroids4 import Asteroid1
+from Asteroids import Asteroid
 
 class run_scratch:
 

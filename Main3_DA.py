@@ -3,7 +3,7 @@ import os
 import platform
 from globals import *
 from rocket import Rocket
-from Asteroid_DA import Asteroid
+from Asteroids import Asteroid
 import pickle
 
 
@@ -49,11 +49,7 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
         self.flash_count = 0
-        self.rocket = Rocket(self.width, self.height)
-        self.Trocket = Rocket(self.width, self.height)
 
-        self.asteroid = Asteroid(self.width, self.height)
-        self.asteroid2 = Asteroid(self.width, self.height)
         
         # Music initialisation
         if self.play_music:
@@ -129,16 +125,25 @@ class run_scratch:
             else:
                 self.draw_text("Press space to start playing!",
                                22, WHITE, self.width / 2, self.height / 1.8)
+        
+        #Initialise Rockets and Asteroids
+        self.rocket = Rocket(self.width, self.height, self.fullscreen)
+        self.Trocket = Rocket(self.width, self.height, self.fullscreen)
 
+        self.asteroid = Asteroid(self.width, self.height)
+        self.asteroid2 = Asteroid(self.width, self.height)
+        
         # Update display
         pygame.display.flip()
 
     def play(self):
+               
         running = True
 
         # Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
 
+        
         while running:
             self.screen.blit(self.background, (0, 0))
             self.draw_text(f"Score: {self.asteroid.points}",
@@ -197,6 +202,7 @@ class run_scratch:
                     running = False
                 self.rocket.reset(self.width / 2, self.height / 2)
                 self.asteroid.reset(self.width, self.height / 2)
+                self.asteroid2.reset(self.width, self.height / 2)
                 self.play_again = False
 
         # After the game finishes, update the high score if needed

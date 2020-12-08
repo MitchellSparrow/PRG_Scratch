@@ -17,8 +17,6 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 LIGHTBLUE = (0, 155, 155)
 
-# Rocket settings
-Rocket_size = 0.5
 
 #Asteroid settings
 Aminsize = 200
