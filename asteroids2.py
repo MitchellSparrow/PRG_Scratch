@@ -1,6 +1,6 @@
 import pygame
 import random
-
+from globals import *
     
 class Asteroid():
     Asteroid1= pygame.image.load("Images/Asteroids/Asteroid1.png")
