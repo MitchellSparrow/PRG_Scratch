@@ -1,6 +1,6 @@
 import pygame
 import random
-from globals import * 
+
     
 class Asteroid():
     Asteroid1= pygame.image.load("Images/Asteroids/Asteroid1.png")
@@ -39,7 +39,7 @@ class Asteroid1(Asteroid):
         self.image = Asteroid1_scaled
         self.rect = self.image.get_rect()
         Asteroid1_rect.x = WIDTH
-        Asteroid1_rect.y = random.randrange(100,WIDTH)
+        Asteroid1_rect.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid1.rect.colliderect(rocket.Rect)
@@ -51,7 +51,7 @@ class Asteroid2(Asteroid):
         self.image = Asteroid2_scaled
         self.rect = self.image.get_rect()
         asteroid2_rect.x = WIDTH
-        asteroid2_rect.y = random.randrange(100,WIDTH)
+        asteroid2_rect.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid2.rect.colliderect(rocket.Rect)
@@ -63,7 +63,7 @@ class Asteroid3(Asteroid):
         self.image = Asteroid3_scaled
         self.rect = self.image.get_rect()
         asteroid3_rect.x = WIDTH
-        asteroid3_rect.y = random.randrange(100,WIDTH)
+        asteroid3_rect.y = random.randrange(100,HEIGHT)
         
     def checkCollision(sprite1, sprite2):
         col = Asteroid3.rect.colliderect(rocket.Rect)
@@ -71,10 +71,6 @@ class Asteroid3(Asteroid):
             pygame.quit()
               
     
-    
-
-    
-
 pygame.time.set_timer(USEREVENT+2, 1000)
 pygame.time.set_timer(USEREVENT+3, 10000)
 #Spawn a random asteroid every second
@@ -92,4 +88,6 @@ while run:
     if event.type == USEREVENT+3:
         difficulty +=5
 # Could be used to indicate progressing to the next level
-    Asteroid.checkCollision(asteroid.image, rocket.image)
+    Asteroid1.checkCollision(Asteroid1.rect, rocket.Rect)
+    Asteroid2.checkCollision(Asteroid2.rect, rocket.Rect)
+    Asteroid3.checkCollision(Asteroid3.rect, rocket.Rect)
