@@ -8,13 +8,18 @@ import numpy as np
 class Rocket:
     # Load rocket image(s) and scale
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
-    FS_Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
-    FS_Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
+    Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
+    Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
 
-    Rocket_R = pygame.transform.scale(FS_Rocket_R, (int(FS_Rocket_R.get_width(
-    )/2), int(FS_Rocket_R.get_height()/2)))
-    Rocket_L = pygame.transform.scale(FS_Rocket_L, (int(FS_Rocket_L.get_width(
-    )/2), int(FS_Rocket_L.get_height()/2)))
+    FS_Rocket_R = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
+    )/ROCKET_FS_SCALING), int(Rocket_R.get_height()/ROCKET_FS_SCALING)))
+    FS_Rocket_L = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
+    )/ROCKET_FS_SCALING), int(Rocket_L.get_height()/ROCKET_FS_SCALING)))
+
+    Rocket_R = pygame.transform.scale(Rocket_R, (int(Rocket_R.get_width(
+    )/ROCKET_NORMAL_SCALING), int(Rocket_R.get_height()/ROCKET_NORMAL_SCALING)))
+    Rocket_L = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
+    )/ROCKET_NORMAL_SCALING), int(Rocket_L.get_height()/ROCKET_NORMAL_SCALING)))
 
     def __init__(self, width, height, fullscreen):
         self.fullscreen = fullscreen

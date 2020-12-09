@@ -149,8 +149,8 @@ class run_scratch:
         while running:
             # self.screen.blit(self.background, (0, 0))
 
-            self.BgMovement.bgX -= 1.5
-            self.BgMovement.bgX2 -= 1.5
+            self.BgMovement.bgX -= BACKGROUND_SPEED
+            self.BgMovement.bgX2 -= BACKGROUND_SPEED
             if self.BgMovement.bgX < self.BgMovement.width * -1:
                 self.BgMovement.bgX = self.BgMovement.width
             if self.BgMovement.bgX2 < self.BgMovement.width * -1:
@@ -345,7 +345,6 @@ class run_scratch:
                             (event.w, event.h), pygame.RESIZABLE)
 
     def draw_text(self, text, size, color, x, y):
-
         font = pygame.font.Font("./Fonts/GamePlayed.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
@@ -353,7 +352,6 @@ class run_scratch:
         self.screen.blit(text_surface, text_rect)
 
     def draw_text_title(self, text, size, color, x, y):
-
         font = pygame.font.Font("./Fonts/Retronoid1.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()

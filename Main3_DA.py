@@ -5,6 +5,7 @@ from globals import *
 from rocket import Rocket
 from Asteroids import Asteroid
 import pickle
+from BgMovement import BgMovement
 
 
 class run_scratch:
@@ -13,8 +14,8 @@ class run_scratch:
     click = False
     play_music = True
     highscore = 0
-    height = 600
-    width = 1000
+    height = HEIGHT
+    width = WIDTH
     fullscreen = False
     play_again = False
     quit = False
@@ -50,7 +51,8 @@ class run_scratch:
             "./Music/background.mp3")
         self.flash_count = 0
 
-        
+        self.BgMovement = BgMovement(self.background, self.width)
+
         # Music initialisation
         if self.play_music:
             pygame.mixer.music.play(
@@ -104,51 +106,59 @@ class run_scratch:
         self.flash_count += 10
 
         if self.fullscreen:
-            self.draw_text(TITLE, 72, WHITE,
-                           self.width / 2, self.height / 5)
+            self.draw_text_title(TITLE, 80, WHITE,
+                                 self.width / 2, self.height / 6)
             self.draw_text(f"High Score: {self.highscore}",
-                           48, WHITE, self.width / 2, self.height / 3)
+                           30, WHITE, self.width / 2, self.height / 2.8)
             if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
-                               48, BLACK, self.width / 2, self.height / 1.8)
+                               30, BLACK, self.width / 2, self.height / 1.8)
             else:
                 self.draw_text("Press space to start playing!",
-                               48, WHITE, self.width / 2, self.height / 1.8)
+                               30, WHITE, self.width / 2, self.height / 1.8)
         else:
-            self.draw_text(TITLE, 48, WHITE,
-                           self.width / 2, self.height / 5)
+            self.draw_text_title(TITLE, 70, WHITE,
+                                 self.width / 2, self.height / 6)
             self.draw_text(f"High Score: {self.highscore}",
-                           22, WHITE, self.width / 2, self.height / 3)
+                           22, WHITE, self.width / 2, self.height / 2.8)
             if self.flash_count % 120 == 0:
                 self.draw_text("Press space to start playing!",
                                22, BLACK, self.width / 2, self.height / 1.8)
             else:
                 self.draw_text("Press space to start playing!",
                                22, WHITE, self.width / 2, self.height / 1.8)
-        
-        #Initialise Rockets and Asteroids
+
+        # Initialise Rockets and Asteroids
         self.rocket = Rocket(self.width, self.height, self.fullscreen)
         self.Trocket = Rocket(self.width, self.height, self.fullscreen)
 
-        self.asteroid = Asteroid(self.width, self.height)
-        self.asteroid2 = Asteroid(self.width, self.height)
-        
+        self.asteroid = Asteroid(self.width, self.height, self.width)
+        self.asteroid2 = Asteroid(self.width, self.height, self.width * 1.333)
+        self.asteroid3 = Asteroid(self.width, self.height, self.width * 1.666)
+
         # Update display
         pygame.display.flip()
 
     def play(self):
-               
+
         running = True
 
         # Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
 
-        
         while running:
-            self.screen.blit(self.background, (0, 0))
-            self.draw_text(f"Score: {self.asteroid.points}",
-                           30, WHITE, 55, 10)
+            # self.screen.blit(self.background, (0, 0))
 
+            self.BgMovement.bgX -= BACKGROUND_SPEED
+            self.BgMovement.bgX2 -= BACKGROUND_SPEED
+            if self.BgMovement.bgX < self.BgMovement.width * -1:
+                self.BgMovement.bgX = self.BgMovement.width
+            if self.BgMovement.bgX2 < self.BgMovement.width * -1:
+                self.BgMovement.bgX2 = self.BgMovement.width
+            self.BgMovement.redrawWindow(self.screen)
+
+            self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
+                           30, WHITE, 100, 10)
             # Rocket / Asteroids movements each game tick
 
             self.rocket.Movement(self.width, self.height)
@@ -164,7 +174,12 @@ class run_scratch:
             self.asteroid2.Draw(self.screen)
             self.asteroid2.DrawRect(self.screen)
             self.asteroid2.checkCollision(self.rocket)
-            
+
+            self.asteroid3.Movement(self.width, self.height)
+            self.asteroid3.Draw(self.screen)
+            self.asteroid3.DrawRect(self.screen)
+            self.asteroid3.checkCollision(self.rocket)
+
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -194,15 +209,19 @@ class run_scratch:
                         self.play_again = False
                         # self.lost = True
 
-            if self.asteroid.collision or self.asteroid2.collision:
-                if self.asteroid.points > self.highscore:
-                    self.highscore = self.asteroid.points
+            if self.asteroid.collision or self.asteroid2.collision or self.asteroid3.collision:
+                if self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3 > self.highscore:
+                    self.highscore = self.asteroid.points + \
+                        self.asteroid2.points + self.asteroid3.points - 3
                 self.game_over()
                 if not self.play_again:
                     running = False
                 self.rocket.reset(self.width / 2, self.height / 2)
-                self.asteroid.reset(self.width, self.height / 2)
-                self.asteroid2.reset(self.width, self.height / 2)
+                self.asteroid.reset(self.width, self.height / 2, self.width)
+                self.asteroid2.reset(
+                    self.width, self.height / 2, self.width*1.333)
+                self.asteroid3.reset(
+                    self.width, self.height / 2, self.width*1.666)
                 self.play_again = False
 
         # After the game finishes, update the high score if needed
@@ -221,27 +240,31 @@ class run_scratch:
             self.flash_count += 10
 
             if self.fullscreen:
-                self.draw_text("GAME OVER", 72, WHITE,
-                               self.width / 2, self.height / 5)
+                self.draw_text_title("GAME OVER", 72, WHITE,
+                                     self.width / 2, self.height / 5)
+                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
+                               40, WHITE, self.width / 2, self.height / 3)
                 self.draw_text("Press ESC to return to home",
-                               22, WHITE, self.width / 2, self.height / 3)
+                               30, WHITE, self.width / 2, self.height / 2.2)
                 if self.flash_count % 120 == 0:
                     self.draw_text("Press space to try again!",
-                                   48, BLACK, self.width / 2, self.height / 1.8)
+                                   48, BLACK, self.width / 2, self.height / 1.5)
                 else:
                     self.draw_text("Press space to try again!",
-                                   48, WHITE, self.width / 2, self.height / 1.8)
+                                   48, WHITE, self.width / 2, self.height / 1.5)
             else:
-                self.draw_text("GAME OVER", 48, WHITE,
-                               self.width / 2, self.height / 5)
+                self.draw_text_title("GAME OVER", 70, WHITE,
+                                     self.width / 2, self.height / 6)
+                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
+                               30, WHITE, self.width / 2, self.height / 3)
                 self.draw_text("Press ESC to return to home",
-                               22, WHITE, self.width / 2, self.height / 3)
+                               22, WHITE, self.width / 2, self.height / 2.2)
                 if self.flash_count % 120 == 0:
                     self.draw_text("Press space to try again!",
-                                   22, BLACK, self.width / 2, self.height / 1.8)
+                                   22, BLACK, self.width / 2, self.height / 1.5)
                 else:
                     self.draw_text("Press space to try again!",
-                                   22, WHITE, self.width / 2, self.height / 1.8)
+                                   22, WHITE, self.width / 2, self.height / 1.5)
 
             # Update display
             pygame.display.update()
@@ -283,23 +306,23 @@ class run_scratch:
 
             # Tutorial screen text
             if self.fullscreen:
-                self.draw_text("Tutorial",
-                               72, WHITE, self.width / 2, self.height / 7)
+                self.draw_text_title("Tutorial",
+                                     72, WHITE, self.width / 2, self.height / 7)
                 self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
-                               48, WHITE, self.width / 2, 2*self.height / 7)
+                               20, WHITE, self.width / 2, 2*self.height / 6)
                 self.draw_text("Avoid the asteroids for as long as possible",
-                               48, WHITE, self.width / 2, 3*self.height / 7)
+                               20, WHITE, self.width / 2, 3*self.height / 6)
                 self.draw_text("Your score increases over time, try to beat the high score!",
-                               48, WHITE, self.width / 2, 4*self.height / 7)
+                               20, WHITE, self.width / 2, 4*self.height / 6)
             else:
-                self.draw_text("Tutorial",
-                               48, WHITE, self.width / 2, self.height / 7)
+                self.draw_text_title("Tutorial",
+                                     70, WHITE, self.width / 2, self.height / 7.5)
                 self.draw_text("The Up, Down, Left, Right arrowkeys move your rocket. You can test this now!",
-                               22, WHITE, self.width / 2, 2*self.height / 7)
+                               20, WHITE, self.width / 2, 2*self.height / 6)
                 self.draw_text("Avoid the asteroids for as long as possible",
-                               22, WHITE, self.width / 2, 3*self.height / 7)
+                               20, WHITE, self.width / 2, 3*self.height / 6)
                 self.draw_text("Your score increases over time, try to beat the high score!",
-                               22, WHITE, self.width / 2, 4*self.height / 7)
+                               20, WHITE, self.width / 2, 4*self.height / 6)
 
             # Update display
             pygame.display.update()
@@ -322,8 +345,16 @@ class run_scratch:
                             (event.w, event.h), pygame.RESIZABLE)
 
     def draw_text(self, text, size, color, x, y):
-        font = pygame.font.Font(pygame.font.match_font(FONT_NAME), size)
-        # font = pygame.font.Font("./Fonts/Pixelated_Regular.ttf", size)
+
+        font = pygame.font.Font("./Fonts/GamePlayed.ttf", size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
+
+    def draw_text_title(self, text, size, color, x, y):
+
+        font = pygame.font.Font("./Fonts/Retronoid1.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
@@ -341,33 +372,33 @@ class run_scratch:
             # Draw Background and text to settings screen
             self.screen.blit(self.background, (0, 0))
 
-            self.draw_text("SETTINGS", 48, WHITE,
-                           self.width / 2, self.height / 7)
+            self.draw_text_title("SETTINGS", 70, WHITE,
+                                 self.width / 2, self.height / 7)
             self.draw_text("Press ESC to go back",
-                           48, WHITE, self.width / 2, self.height / 3.5)
+                           22, WHITE, self.width / 2, self.height / 3)
             self.draw_text("MUSIC",
-                           48, WHITE, self.width / 3, self.height / 2)
+                           40, WHITE, self.width / 3, self.height / 2)
             self.draw_text("FULLSCREEN",
-                           48, WHITE, self.width / 3, int(self.height / 1.5))
+                           40, WHITE, self.width / 3, int(self.height / 1.5))
 
             # Create ON/OFF buttons
             on_off_button = pygame.Rect(
-                self.width*2/3 - 30, self.height/2 - 7.5, 60, 40)
+                self.width*2/3 - 30, self.height/2, 60, 40)
 
             on_off_button2 = pygame.Rect(
-                self.width*2/3 - 30, int(self.height/1.5 - 7.5), 60, 40)
+                self.width*2/3 - 30, self.height/1.5, 60, 40)
 
             # MUSIC option
             if self.play_music:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button, border_radius=20)
                 self.draw_text("ON", 20, WHITE,
-                               self.width*2/3, self.height/2)
+                               self.width*2/3, self.height/2 + 7.5)
             else:
                 pygame.draw.rect(self.screen, WHITE,
                                  on_off_button, border_radius=20)
                 self.draw_text("OFF", 20, LIGHTBLUE,
-                               self.width*2/3, self.height/2)
+                               self.width*2/3, self.height/2 + 7.5)
 
             if on_off_button.collidepoint((mx, my)):
                 if self.click:
@@ -383,30 +414,32 @@ class run_scratch:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button2, border_radius=20)
                 self.draw_text("ON", 20, WHITE,
-                               self.width*2/3, self.height/1.5)
+                               self.width*2/3, self.height/1.5 + 7.5)
             else:
                 pygame.draw.rect(self.screen, WHITE,
                                  on_off_button2, border_radius=20)
                 self.draw_text("OFF", 20, LIGHTBLUE,
-                               self.width*2/3, self.height/1.5)
+                               self.width*2/3, self.height/1.5 + 7.5)
 
             if on_off_button2.collidepoint((mx, my)):
                 if self.click:
                     self.fullscreen = not self.fullscreen
                     if self.fullscreen is True:
-                        try: 
+                        try:
                             # Load correct resolution background, update local variables and set to fullscreen mode
                             bg_path = "./Images/Backgrounds/Space_Background_" + \
                                 str(self.max_height) + ".jpg"
+                            self.background = pygame.image.load(bg_path)
                         except:
-                            #If cant find resolution, use 1080 px height
+                            # If cant find resolution, use 1080 px height
                             bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
-                        self.background = pygame.image.load(bg_path)
+                            self.background = pygame.image.load(bg_path)
+
                         self.width = self.max_width
                         self.height = self.max_height
                         self.screen = pygame.display.set_mode(
                             (self.width, self.height), pygame.FULLSCREEN)
-                            
+
                     else:
                         # Load smaller background, set windo to default size
                         bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
@@ -475,10 +508,17 @@ class run_scratch:
             os._exit(0)  # for Mac users.
 
         file = open("settings.txt", "wb")  # write binary
-        pickle.dump({'play_music': self.play_music,
-                     'highscore': self.highscore,
-                     'width': self.width,
-                     'height': self.height}, file)
+
+        if not self.fullscreen:
+            pickle.dump({'play_music': self.play_music,
+                         'highscore': self.highscore,
+                         'width': self.width,
+                         'height': self.height}, file)
+        else:
+            pickle.dump({'play_music': self.play_music,
+                         'highscore': self.highscore,
+                         'width': WIDTH,
+                         'height': HEIGHT}, file)
         file.close()
 
 
