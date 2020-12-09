@@ -288,7 +288,7 @@ class run_scratch:
                                20, WHITE, self.width / 2, 2*self.height / 6)
                 self.draw_text("Avoid the asteroids for as long as possible",
                                20, WHITE, self.width / 2, 3*self.height / 6)
-                self.draw_text("Your score increases over time, try to beat the high score!",
+                self.draw_text("Your score increases with asteroids passed, try to beat the high score!",
                                20, WHITE, self.width / 2, 4*self.height / 6)
             else:
                 self.draw_text_title("Tutorial",
@@ -297,7 +297,7 @@ class run_scratch:
                                20, WHITE, self.width / 2, 2*self.height / 6)
                 self.draw_text("Avoid the asteroids for as long as possible",
                                20, WHITE, self.width / 2, 3*self.height / 6)
-                self.draw_text("Your score increases over time, try to beat the high score!",
+                self.draw_text("Your score increases with asteroids passed, try to beat the high score!",
                                20, WHITE, self.width / 2, 4*self.height / 6)
 
             # Update display
