@@ -63,7 +63,6 @@ class Asteroid:
     def DrawRect(self, surface):
         self.topleft = (self.x_pos, self.y_pos)
         self.rect = self.image.get_rect(topleft=(self.topleft))
-        #pygame.draw.rect(surface, BLACK, self.rect, 2)
 
     def checkCollision(self, rocket):
         col = self.rect.colliderect(rocket.Rect)

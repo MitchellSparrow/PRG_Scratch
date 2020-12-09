@@ -14,8 +14,8 @@ class run_scratch:
     click = False
     play_music = True
     highscore = 0
-    height = 600
-    width = 1000
+    height = HEIGHT
+    width = WIDTH
     fullscreen = False
     play_again = False
     quit = False
@@ -508,10 +508,17 @@ class run_scratch:
             os._exit(0)  # for Mac users.
 
         file = open("settings.txt", "wb")  # write binary
-        pickle.dump({'play_music': self.play_music,
-                     'highscore': self.highscore,
-                     'width': 1000,
-                     'height': 600}, file)
+
+        if not self.fullscreen:
+            pickle.dump({'play_music': self.play_music,
+                         'highscore': self.highscore,
+                         'width': self.width,
+                         'height': self.height}, file)
+        else:
+            pickle.dump({'play_music': self.play_music,
+                         'highscore': self.highscore,
+                         'width': WIDTH,
+                         'height': HEIGHT}, file)
         file.close()
 
 

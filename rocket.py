@@ -74,4 +74,3 @@ class Rocket:
     def DrawRect(self, surface):
         self.topleft = (self.x_pos, self.y_pos)
         self.Rect = self.image.get_rect(topleft=(self.topleft))
-        #pygame.draw.rect(surface, BLACK, self.Rect, 2)
