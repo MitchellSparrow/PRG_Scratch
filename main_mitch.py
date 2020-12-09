@@ -3,7 +3,7 @@ import os
 import platform
 from globals import *
 from rocket import Rocket
-from asteroids_mitch import Asteroid
+from Asteroids import Asteroid
 import pickle
 
 
@@ -19,7 +19,6 @@ class run_scratch:
     play_again = False
     quit = False
     count = 0
-    score = 0
 
     def __init__(self):
         # Initialize pygame
@@ -182,6 +181,16 @@ class run_scratch:
                         self.height = event.h
                         self.screen = pygame.display.set_mode(
                             (event.w, event.h), pygame.RESIZABLE)
+
+                # Simulate game over
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_BACKSPACE:
+                        self.game_over()
+                        if not self.play_again:
+                            running = False
+                        self.rocket.reset(self.width / 2, self.height / 2)
+                        self.play_again = False
+                        # self.lost = True
 
             if self.asteroid.collision or self.asteroid2.collision:
                 if self.asteroid.points > self.highscore:
@@ -388,10 +397,12 @@ class run_scratch:
                             # Load correct resolution background, update local variables and set to fullscreen mode
                             bg_path = "./Images/Backgrounds/Space_Background_" + \
                                 str(self.max_height) + ".jpg"
+                            self.background = pygame.image.load(bg_path)
                         except:
                             # If cant find resolution, use 1080 px height
                             bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
-                        self.background = pygame.image.load(bg_path)
+                            self.background = pygame.image.load(bg_path)
+
                         self.width = self.max_width
                         self.height = self.max_height
                         self.screen = pygame.display.set_mode(

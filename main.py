@@ -129,8 +129,8 @@ class run_scratch:
         self.rocket = Rocket(self.width, self.height, self.fullscreen)
         self.Trocket = Rocket(self.width, self.height, self.fullscreen)
 
-        self.asteroid = Asteroid(self.width, self.height)
-        self.asteroid2 = Asteroid(self.width, self.height)
+        self.asteroid = Asteroid(self.width, self.height, self.width)
+        self.asteroid2 = Asteroid(self.width, self.height, self.width * 1.5)
 
         # Update display
         pygame.display.flip()
@@ -144,7 +144,7 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
-            self.draw_text(f"Score: {self.asteroid.points}",
+            self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
                            30, WHITE, 55, 10)
 
             # Rocket / Asteroids movements each game tick
@@ -194,13 +194,14 @@ class run_scratch:
 
             if self.asteroid.collision or self.asteroid2.collision:
                 if self.asteroid.points > self.highscore:
-                    self.highscore = self.asteroid.points
+                    self.highscore = self.asteroid.points + self.asteroid2.points - 2
                 self.game_over()
                 if not self.play_again:
                     running = False
                 self.rocket.reset(self.width / 2, self.height / 2)
-                self.asteroid.reset(self.width, self.height / 2)
-                self.asteroid2.reset(self.width, self.height / 2)
+                self.asteroid.reset(self.width, self.height / 2, self.width)
+                self.asteroid2.reset(
+                    self.width, self.height / 2, self.width*1.5)
                 self.play_again = False
 
         # After the game finishes, update the high score if needed
