@@ -122,7 +122,7 @@ class run_scratch:
         # Initialise Rockets and Asteroids
         self.rocket = Rocket(self.width, self.height, self.fullscreen)
         self.Trocket = Rocket(self.width, self.height, self.fullscreen)
-
+        self.T_asteroid = Asteroid(self.width, self.height, self.width)
         self.asteroids = []
 
         for i in range(NUM_ASTEROIDS):
@@ -270,7 +270,8 @@ class run_scratch:
         running = True
         # Reset rocket to original position
         self.Trocket.reset(self.width / 2.1, self.height / 1.5)
-
+        self.T_asteroid.reset(self.width, self.height, self.width)
+        
         while running:
             # Background
             self.screen.blit(self.background, (0, 0))
@@ -279,7 +280,9 @@ class run_scratch:
             key = pygame.key.get_pressed()
             self.Trocket.Movement(self.width, self.height)
             self.Trocket.Draw(self.screen)
-
+            self.T_asteroid.Movement(self.width, self.height)
+            self.T_asteroid.Draw(self.screen)
+            
             # Tutorial screen text
             if self.fullscreen:
                 self.draw_text_title("Tutorial",
@@ -407,7 +410,7 @@ class run_scratch:
                                 str(self.max_height) + ".jpg"
                             self.background = pygame.image.load(bg_path)
                         except:
-                            # If cant find resolution, use 1080 px height
+                            # If can't find a background with same resolution, use 1080 px height
                             bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                             self.background = pygame.image.load(bg_path)
 
