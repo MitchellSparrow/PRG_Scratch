@@ -1,15 +1,16 @@
-import pygame
+from globals import BACKGROUND_SPEED
 
 
 class BgMovement():
-    def __init__(self, background, width):
-        self.background = background
-        self.bgX = 0
-        self.width = width
-        self.bgX2 =  self.width
-        
+
+    def __init__(self):
+        self.shift = 0
+
     def redrawWindow(self, surface, background):
-        surface.blit(self.background, (self.bgX, 0))
-        surface.blit(self.background, (self.bgX2, 0))
-        
-    
+        if self.shift > background.get_width():
+            self.shift = 0
+        else:
+            self.shift += BACKGROUND_SPEED
+
+        surface.blit(background, (-self.shift, 0))
+        surface.blit(background, (background.get_width() - self.shift, 0))

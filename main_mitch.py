@@ -49,7 +49,7 @@ class run_scratch:
         self.flash_count = 0
 
         # Initialize Moving Background
-        self.BgMovement = BgMovement(self.background, self.width)
+        self.BgMovement = BgMovement()
 
         # Initialize Asteroids
         self.asteroids = []
@@ -154,17 +154,7 @@ class run_scratch:
 
         while running:
             # Move and draw the background
-            self.BgMovement.bgX -= BACKGROUND_SPEED
-            self.BgMovement.bgX2 -= BACKGROUND_SPEED
-            if self.BgMovement.bgX < -self.BgMovement.width:
-                self.BgMovement.bgX = self.BgMovement.width
-            if self.BgMovement.bgX2 < -self.BgMovement.width:
-                self.BgMovement.bgX2 = self.BgMovement.width
             self.BgMovement.redrawWindow(self.screen, self.background)
-
-            # Show the score in the top left corner of the screen
-            self.draw_text(f"Score: {self.score - NUM_ASTEROIDS}",
-                           30, WHITE, 100, 10)
 
             # Move and draw the rocket each game tick
             self.rocket.Movement(self.width, self.height)
@@ -182,6 +172,10 @@ class run_scratch:
                 self.score += asteroid.points
                 if asteroid.collision:
                     play_collision = True
+
+            # Show the score in the top left corner of the screen
+            self.draw_text(f"Score: {self.score - NUM_ASTEROIDS}",
+                           30, WHITE, 100, 10)
 
             pygame.display.update()
             self.clock.tick(FPS)
