@@ -153,10 +153,10 @@ class run_scratch:
             self.BgMovement.bgX -= BACKGROUND_SPEED
             self.BgMovement.bgX2 -= BACKGROUND_SPEED
             
-            if self.BgMovement.bgX < self.background.get_width() * -1:
-                self.BgMovement.bgX = self.background.get_width()
-            if self.BgMovement.bgX2 < self.background.get_width() * -1:
-                self.BgMovement.bgX2 = self.background.get_width()
+            if self.BgMovement.bgX < self.BgMovement.width * -1:
+                self.BgMovement.bgX = self.BgMovement.width
+            if self.BgMovement.bgX2 < self.BgMovement.width * -1:
+                self.BgMovement.bgX2 = self.BgMovement.width
 
             # Rocket / Asteroids movements each game tick
             self.rocket.Movement(self.width, self.height)
