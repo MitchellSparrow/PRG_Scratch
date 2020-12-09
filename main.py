@@ -157,18 +157,14 @@ class run_scratch:
             self.BgMovement.redrawWindow(self.screen, self.background)
 
             # Move and draw the rocket each game tick
-            self.rocket.Movement(self.width, self.height)
-            self.rocket.Draw(self.screen)
-            self.rocket.DrawRect(self.screen)
+            self.rocket.run(self.screen, self.width, self.height)
 
             self.score = 0
 
             # Move and draw all asteroids each game tick
             for asteroid in self.asteroids:
-                asteroid.Movement(self.width, self.height)
-                asteroid.Draw(self.screen)
-                asteroid.DrawRect(self.screen)
-                asteroid.checkCollision(self.rocket)
+                asteroid.run(self.screen, self.rocket,
+                             self.width, self.height)
                 self.score += asteroid.points
                 if asteroid.collision:
                     play_collision = True

@@ -26,6 +26,12 @@ class Asteroid:
         self.y_pos = random.randrange(0, int(height - height/20))
         self.difficulty = DIFFICULTY
 
+    def run(self, surface, rocket,  width, height):
+        ''' Main function'''
+        self.Movement(width, height)
+        self.Draw(surface)
+        self.checkCollision(rocket)
+
     def reset(self, width, height, init_val):
         self.points = 1
         self.difficulty = DIFFICULTY
@@ -59,8 +65,6 @@ class Asteroid:
 
     def Draw(self, surface):
         surface.blit(self.image, (self.x_pos, self.y_pos))
-
-    def DrawRect(self, surface):
         self.topleft = (self.x_pos, self.y_pos)
         self.rect = self.image.get_rect(topleft=(self.topleft))
 
