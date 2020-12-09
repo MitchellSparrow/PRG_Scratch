@@ -20,8 +20,8 @@ TRANSPARENT = (0, 0, 0, 0)
 
 
 # Asteroid settings
-Aminsize = 100
-Amaxsize = 200
+Aminsize = 75
+Amaxsize = 125
 
 FPS = 60
 FONT_NAME = 'arial'
@@ -33,8 +33,8 @@ ROCKET_FS_SCALING = 1.5
 ROCKET_NORMAL_SCALING = 2
 
 EXPLOSION_SCALING = 0.4
-EXPLOSION_FS_SCALING =0.2
+EXPLOSION_FS_SCALING = 0.2
 
 
 FLASH_RATE = 1.2
-NUM_ASTEROIDS = 6
+NUM_ASTEROIDS = 5
