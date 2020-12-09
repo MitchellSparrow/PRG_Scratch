@@ -499,8 +499,8 @@ class run_scratch:
         file = open("settings.txt", "wb")  # write binary
         pickle.dump({'play_music': self.play_music,
                      'highscore': self.highscore,
-                     'width': self.width,
-                     'height': self.height}, file)
+                     'width': 1000,
+                     'height': 600}, file)
         file.close()
 
 
