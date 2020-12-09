@@ -130,7 +130,8 @@ class run_scratch:
         self.Trocket = Rocket(self.width, self.height, self.fullscreen)
 
         self.asteroid = Asteroid(self.width, self.height, self.width)
-        self.asteroid2 = Asteroid(self.width, self.height, self.width * 1.5)
+        self.asteroid2 = Asteroid(self.width, self.height, self.width * 1.333)
+        self.asteroid3 = Asteroid(self.width, self.height, self.width * 1.666)
 
         # Update display
         pygame.display.flip()
@@ -144,8 +145,8 @@ class run_scratch:
 
         while running:
             self.screen.blit(self.background, (0, 0))
-            self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
-                           30, WHITE, 75, 10)
+            self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
+                           30, WHITE, 100, 10)
 
             # Rocket / Asteroids movements each game tick
 
@@ -162,6 +163,11 @@ class run_scratch:
             self.asteroid2.Draw(self.screen)
             self.asteroid2.DrawRect(self.screen)
             self.asteroid2.checkCollision(self.rocket)
+
+            self.asteroid3.Movement(self.width, self.height)
+            self.asteroid3.Draw(self.screen)
+            self.asteroid3.DrawRect(self.screen)
+            self.asteroid3.checkCollision(self.rocket)
 
             pygame.display.update()
             self.clock.tick(FPS)
@@ -192,16 +198,19 @@ class run_scratch:
                         self.play_again = False
                         # self.lost = True
 
-            if self.asteroid.collision or self.asteroid2.collision:
-                if self.asteroid.points > self.highscore:
-                    self.highscore = self.asteroid.points + self.asteroid2.points - 2
+            if self.asteroid.collision or self.asteroid2.collision or self.asteroid3.collision:
+                if self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3 > self.highscore:
+                    self.highscore = self.asteroid.points + \
+                        self.asteroid2.points + self.asteroid3.points - 3
                 self.game_over()
                 if not self.play_again:
                     running = False
                 self.rocket.reset(self.width / 2, self.height / 2)
                 self.asteroid.reset(self.width, self.height / 2, self.width)
                 self.asteroid2.reset(
-                    self.width, self.height / 2, self.width*1.5)
+                    self.width, self.height / 2, self.width*1.333)
+                self.asteroid3.reset(
+                    self.width, self.height / 2, self.width*1.666)
                 self.play_again = False
 
         # After the game finishes, update the high score if needed
@@ -222,7 +231,7 @@ class run_scratch:
             if self.fullscreen:
                 self.draw_text_title("GAME OVER", 72, WHITE,
                                      self.width / 2, self.height / 5)
-                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
+                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
                                40, WHITE, self.width / 2, self.height / 3)
                 self.draw_text("Press ESC to return to home",
                                30, WHITE, self.width / 2, self.height / 2.2)
@@ -235,7 +244,7 @@ class run_scratch:
             else:
                 self.draw_text_title("GAME OVER", 70, WHITE,
                                      self.width / 2, self.height / 6)
-                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
+                self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
                                30, WHITE, self.width / 2, self.height / 3)
                 self.draw_text("Press ESC to return to home",
                                22, WHITE, self.width / 2, self.height / 2.2)
