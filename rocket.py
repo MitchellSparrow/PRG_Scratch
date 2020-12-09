@@ -20,6 +20,24 @@ class Rocket:
     )/ROCKET_NORMAL_SCALING), int(Rocket_R.get_height()/ROCKET_NORMAL_SCALING)))
     Rocket_L = pygame.transform.scale(Rocket_L, (int(Rocket_L.get_width(
     )/ROCKET_NORMAL_SCALING), int(Rocket_L.get_height()/ROCKET_NORMAL_SCALING)))
+    
+    #Load explosion images
+    #Source: https://opengameart.org/content/explosions-2 credit: helpcomputer
+    Explosions = [pygame.image.load("Images/Explosions/Explosion1.png"), 
+                  pygame.image.load("Images/Explosions/Explosion2.png"),
+                  pygame.image.load("Images/Explosions/Explosion3.png"),
+                  pygame.image.load("Images/Explosions/Explosion4.png"),
+                  pygame.image.load("Images/Explosions/Explosion5.png"),
+                  pygame.image.load("Images/Explosions/Explosion6.png"),
+                  pygame.image.load("Images/Explosions/Explosion7.png"),
+                  pygame.image.load("Images/Explosions/Explosion8.png"),
+                  pygame.image.load("Images/Explosions/Explosion9.png")]
+    
+    FS_Explosions = []
+    
+    for i in Explosions:
+        FS_Explosions.append(pygame.transform.scale(i, (int(i.get_width(
+    )*EXPLOSION_FS_SCALING), int(i.get_height()*EXPLOSION_FS_SCALING)))
 
     def __init__(self, width, height, fullscreen):
         self.fullscreen = fullscreen
@@ -79,3 +97,18 @@ class Rocket:
     def DrawRect(self, surface):
         self.topleft = (self.x_pos, self.y_pos)
         self.Rect = self.image.get_rect(topleft=(self.topleft))
+
+    def Explosion(self, surface, clock):
+        if self.fullscreen == True: 
+            for pic in self.FS_Explosions:
+                self.image = pic
+                surface.blit(self.image, (self.x_pos, self.y_pos))
+                clock.tick(0.5*FPS)
+        else:
+            for pic in self.Explosions:
+                self.image = pic
+                surface.blit(self.image, (self.x_pos, self.y_pos))
+                clock.tick(0.5*FPS)
+            
+            
+            

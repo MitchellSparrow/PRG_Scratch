@@ -2,7 +2,7 @@ import pygame
 import os
 import platform
 from globals import *
-from rocket import Rocket
+from Rocket_movement_DA import Rocket
 from Asteroids import Asteroid
 import pickle
 from BgMovement import BgMovement
@@ -213,6 +213,8 @@ class run_scratch:
                 if self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3 > self.highscore:
                     self.highscore = self.asteroid.points + \
                         self.asteroid2.points + self.asteroid3.points - 3
+                #Explode rocket and show game over screen
+                self.rocket.Explosion(self.screen,self.clock)
                 self.game_over()
                 if not self.play_again:
                     running = False
