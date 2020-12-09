@@ -5,7 +5,7 @@ import numpy as np
 # Rocket object functions
 
 
-class Rocket:
+class Rocket():
     # Load rocket image(s) and scale
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
     Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
@@ -32,12 +32,6 @@ class Rocket:
                   pygame.image.load("Images/Explosions/Explosion7.png"),
                   pygame.image.load("Images/Explosions/Explosion8.png"),
                   pygame.image.load("Images/Explosions/Explosion9.png")]
-    
-    FS_Explosions = []
-    
-    for i in Explosions:
-        FS_Explosions.append(pygame.transform.scale(i, (int(i.get_width(
-    )*EXPLOSION_FS_SCALING), int(i.get_height()*EXPLOSION_FS_SCALING)))
 
     def __init__(self, width, height, fullscreen):
         self.fullscreen = fullscreen
@@ -99,16 +93,24 @@ class Rocket:
         self.Rect = self.image.get_rect(topleft=(self.topleft))
 
     def Explosion(self, surface, clock):
+
         if self.fullscreen == True: 
-            for pic in self.FS_Explosions:
-                self.image = pic
+            for i in self.Explosions:
+                self.image = pygame.transform.scale(i, (int(i.get_width()/EXPLOSION_FS_SCALING), int(i.get_height()/EXPLOSION_FS_SCALING)))
                 surface.blit(self.image, (self.x_pos, self.y_pos))
-                clock.tick(0.5*FPS)
+                self.x_pos -= 10
+                self.y_pos -= 10
+                pygame.display.update()
+                clock.tick(0.3*FPS)
+                
         else:
-            for pic in self.Explosions:
-                self.image = pic
+            for i in self.Explosions:
+                self.image = pygame.transform.scale(i, (int(i.get_width()/EXPLOSION_SCALING), int(i.get_height()/EXPLOSION_SCALING)))
                 surface.blit(self.image, (self.x_pos, self.y_pos))
-                clock.tick(0.5*FPS)
+                self.x_pos -= 10
+                self.y_pos -= 10
+                pygame.display.update()
+                clock.tick(0.3*FPS)
             
             
             

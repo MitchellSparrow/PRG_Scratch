@@ -5,7 +5,7 @@ import numpy as np
 # Rocket object functions
 
 
-class Rocket:
+class Rocket():
     # Load rocket image(s) and scale
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
     Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
@@ -93,24 +93,24 @@ class Rocket:
         self.Rect = self.image.get_rect(topleft=(self.topleft))
 
     def Explosion(self, surface, clock):
-        self.image.fill(TRANSPARENT)
+
         if self.fullscreen == True: 
             for i in self.Explosions:
-                self.expl = pygame.transform.scale(i, (int(i.get_width()*EXPLOSION_FS_SCALING), int(i.get_height()*EXPLOSION_FS_SCALING)))
-                surface.blit(self.expl, (self.x_pos + self.FS_Rocket_R.get_width()/2, self.y_pos + self.FS_Rocket_R.get_height()/2))
+                self.image = pygame.transform.scale(i, (int(i.get_width()/EXPLOSION_FS_SCALING), int(i.get_height()/EXPLOSION_FS_SCALING)))
+                surface.blit(self.image, (self.x_pos, self.y_pos))
                 self.x_pos -= 10
                 self.y_pos -= 10
                 pygame.display.update()
-                clock.tick(0.4*FPS)
+                clock.tick(0.3*FPS)
                 
         else:
             for i in self.Explosions:
-                self.expl = pygame.transform.scale(i, (int(i.get_width()*EXPLOSION_SCALING), int(i.get_height()*EXPLOSION_SCALING)))
-                surface.blit(self.expl, (self.x_pos + self.Rocket_R.get_width()/2, self.y_pos + self.Rocket_R.get_height()/2))
+                self.image = pygame.transform.scale(i, (int(i.get_width()/EXPLOSION_SCALING), int(i.get_height()/EXPLOSION_SCALING)))
+                surface.blit(self.image, (self.x_pos, self.y_pos))
                 self.x_pos -= 10
                 self.y_pos -= 10
                 pygame.display.update()
-                clock.tick(0.4*FPS)
+                clock.tick(0.3*FPS)
             
             
             
