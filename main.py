@@ -155,7 +155,7 @@ class run_scratch:
                 self.BgMovement.bgX = self.BgMovement.width
             if self.BgMovement.bgX2 < self.BgMovement.width * -1:
                 self.BgMovement.bgX2 = self.BgMovement.width
-            self.BgMovement.redrawWindow(self.screen)
+            self.BgMovement.redrawWindow(self.screen, self.background)
 
             self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points + self.asteroid3.points - 3}",
                            30, WHITE, 100, 10)

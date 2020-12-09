@@ -8,8 +8,8 @@ class BgMovement():
         self.width = width
         self.bgX2 =  self.width
         
-    def redrawWindow(self, surface):
-        surface.blit(self.background, (self.bgX, 0))
-        surface.blit(self.background, (self.bgX2, 0))
+    def redrawWindow(self, surface, background):
+        surface.blit(background, (self.bgX, 0))
+        surface.blit(background, (self.bgX2, 0))
 
     
