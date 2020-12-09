@@ -10,11 +10,11 @@ class Rocket:
     # Source: https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2
     FS_Rocket_R = pygame.image.load("Images/Rockets/Rocket1.png")
     FS_Rocket_L = pygame.image.load("Images/Rockets/Rocket2.png")
-    
+
     Rocket_R = pygame.transform.scale(FS_Rocket_R, (int(FS_Rocket_R.get_width(
-                     )/2), int(FS_Rocket_R.get_height()/2))) 
+    )/2), int(FS_Rocket_R.get_height()/2)))
     Rocket_L = pygame.transform.scale(FS_Rocket_L, (int(FS_Rocket_L.get_width(
-                     )/2), int(FS_Rocket_L.get_height()/2))) 
+    )/2), int(FS_Rocket_L.get_height()/2)))
 
     def __init__(self, width, height, fullscreen):
         self.fullscreen = fullscreen
@@ -22,7 +22,7 @@ class Rocket:
             self.image = self.FS_Rocket_R
         else:
             self.image = self.Rocket_R
-            
+
         # Start position of Rockets
         self.width = width
         self.height = height
@@ -31,7 +31,7 @@ class Rocket:
 
     def reset(self, width, height):
         if self.fullscreen == True:
-                    self.image = self.FS_Rocket_R
+            self.image = self.FS_Rocket_R
         else:
             self.image = self.Rocket_R
         # Start position of Rockets
@@ -74,4 +74,4 @@ class Rocket:
     def DrawRect(self, surface):
         self.topleft = (self.x_pos, self.y_pos)
         self.Rect = self.image.get_rect(topleft=(self.topleft))
-        pygame.draw.rect(surface, BLACK, self.Rect, 2)
+        #pygame.draw.rect(surface, BLACK, self.Rect, 2)

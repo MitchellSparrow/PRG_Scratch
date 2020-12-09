@@ -19,10 +19,11 @@ LIGHTBLUE = (0, 155, 155)
 
 
 # Asteroid settings
-Aminsize = 200
-Amaxsize = 300
+Aminsize = 100
+Amaxsize = 200
 
 FPS = 60
 FONT_NAME = 'arial'
 CLICK = False
 DIFFICULTY = 1
+BACKGROUND_SPEED = 1.5

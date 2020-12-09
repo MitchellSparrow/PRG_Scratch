@@ -7,6 +7,7 @@ from Asteroids import Asteroid
 import pickle
 from BgMovement import BgMovement
 
+
 class run_scratch:
 
     # Default settings
@@ -49,7 +50,7 @@ class run_scratch:
         self.background_music = pygame.mixer.music.load(
             "./Music/background.mp3")
         self.flash_count = 0
-        
+
         self.BgMovement = BgMovement(self.background, self.width)
         # Music initialisation
         if self.play_music:
@@ -132,7 +133,7 @@ class run_scratch:
 
         self.asteroid = Asteroid(self.width, self.height, self.width)
         self.asteroid2 = Asteroid(self.width, self.height, self.width * 1.5)
-        
+
         self.BgMovement = BgMovement(self.background, self.width)
         # Update display
         pygame.display.flip()
@@ -145,10 +146,10 @@ class run_scratch:
         self.rocket.reset(self.width / 2, self.height / 2)
 
         while running:
-            
+
             self.draw_text(f"Score: {self.asteroid.points}",
-                           30, WHITE, 55, 10) 
-            
+                           30, WHITE, 55, 10)
+
             self.BgMovement.bgX -= 1.5
             self.BgMovement.bgX2 -= 1.5
             if self.BgMovement.bgX < self.BgMovement.width * -1:
@@ -156,8 +157,7 @@ class run_scratch:
             if self.BgMovement.bgX2 < self.BgMovement.width * -1:
                 self.BgMovement.bgX2 = self.BgMovement.width
             self.BgMovement.redrawWindow(self.screen)
-            
-                
+
             self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
                            30, WHITE, 55, 10)
 
