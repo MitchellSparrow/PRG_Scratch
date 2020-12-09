@@ -156,7 +156,7 @@ class run_scratch:
             if self.BgMovement.bgX2 < self.BgMovement.width * -1:
                 self.BgMovement.bgX2 = self.BgMovement.width
             self.BgMovement.redrawWindow(self.screen)
-            pygame.display.update()
+            
                 
             self.draw_text(f"Score: {self.asteroid.points + self.asteroid2.points - 2}",
                            30, WHITE, 55, 10)
