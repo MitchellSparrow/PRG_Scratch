@@ -21,6 +21,8 @@ class run_scratch:
     quit = False
 
     def __init__(self):
+        '''Function which initializes the game'''
+
         # Initialize pygame
         pygame.init()
 
