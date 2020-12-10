@@ -12,6 +12,10 @@ class Asteroid:
     # 1: https://www.clipartkey.com/view/hmJJTx_asteroid-sprite-clip-art-asteroid-transparent-background/
     # 2: https://www.clipartkey.com/view/JRTbTo_asteroid-png-picture-asteroid/
     # 3: https://www.clipartkey.com/view/mmbhJw_clip-art-asteroid-picture-transparent-psyche-asteroid/
+    # 4: https://www.clipartkey.com/view/hmJJih_free-asteroid-png-pic-download-vector-clipart-psd/
+    # 5: https://www.clipartkey.com/view/hmJwhT_asteroids-meteoroid-clip-art-transparent-background-asteroid-png/
+    # 6: https://www.clipartkey.com/view/ThhTJo_asteroid-belt-meteoroid-clip-art-transparent-background-asteroid/
+    
     asteroid_images = [pygame.image.load("Images/Asteroids/Asteroid1.png"), pygame.image.load(
         "Images/Asteroids/Asteroid2.png"), pygame.image.load("Images/Asteroids/Asteroid3.png"), pygame.image.load(
         "Images/Asteroids/Asteroid4.png"), pygame.image.load("Images/Asteroids/Asteroid5.png"), pygame.image.load(

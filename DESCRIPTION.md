@@ -4,7 +4,7 @@ A repository for the pygame group project for programming.
 ## TEAM
 
 
-Mitchell Sparrow    20274110    psxms17
+Mitchell Sparrow    	20274110    	psxms17
 Arundeep Chatha 	10350557	psxac11
 Daniel Audcent		20316239	psxda7 
 
@@ -67,7 +67,10 @@ Asteroids:
 # 1: https://www.clipartkey.com/view/hmJJTx_asteroid-sprite-clip-art-asteroid-transparent-background/
 # 2: https://www.clipartkey.com/view/JRTbTo_asteroid-png-picture-asteroid/
 # 3: https://www.clipartkey.com/view/mmbhJw_clip-art-asteroid-picture-transparent-psyche-asteroid/
-	
+# 4: https://www.clipartkey.com/view/hmJJih_free-asteroid-png-pic-download-vector-clipart-psd/
+# 5: https://www.clipartkey.com/view/hmJwhT_asteroids-meteoroid-clip-art-transparent-background-asteroid-png/
+# 6: https://www.clipartkey.com/view/ThhTJo_asteroid-belt-meteoroid-clip-art-transparent-background-asteroid/
+
 Rocket:
 https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2 credit: rygle (remixed from purzen's moon rocket: http://www.clker.com/clipart-spaceship-11.html by James)
 
