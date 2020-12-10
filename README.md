@@ -10,6 +10,11 @@ Daniel Audcent		########	psxda7
 
 ##Instalation Instructions
 
+Ensure that Python and Pygame 2.0 is installed on your device
+
+Run the main.py executable
+
+Enjoy!
 
 
 
