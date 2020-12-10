@@ -4,7 +4,7 @@ A repository for the pygame group project for programming.
 ## TEAM
 
 
-Mitchell Sparrow    	20274110    	psxms17
+Mitchell Sparrow    20274110    psxms17
 Arundeep Chatha 	10350557	psxac11
 Daniel Audcent		20316239	psxda7 
 
@@ -19,7 +19,7 @@ The winning planet is awarded a prize of 300 quadrillion pounds, if their nomina
 
 No prize money is awarded for any planet's competitor who crashes their rocket.
 
-You have been selected randomly as planet Earth's 287th competitor for this year.
+You have been selected randomly as one of planet Earth's competitors for this year.
 
 Try and pass as many asteroids as possible in your rocket without crashing!
 
@@ -72,7 +72,8 @@ Asteroids:
 # 6: https://www.clipartkey.com/view/ThhTJo_asteroid-belt-meteoroid-clip-art-transparent-background-asteroid/
 
 Rocket:
-https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2 credit: rygle (remixed from purzen's moon rocket: http://www.clker.com/clipart-spaceship-11.html by James)
+https://openclipart.org/detail/261323/cartoon-moon-rocket-remix-2 credit: rygle 
+(remixed from purzen's moon rocket: http://www.clker.com/clipart-spaceship-11.html by James)
 
 Explosion:
 https://opengameart.org/content/explosions-2 credit: helpcomputer
