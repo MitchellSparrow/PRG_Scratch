@@ -158,7 +158,6 @@ class run_scratch:
         # Local function variables
         running = True
         play_collision = False
-        finish_line_shift = 0
 
         # Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
@@ -166,22 +165,12 @@ class run_scratch:
             asteroid.reset(
                 self.width, self.height, self.width * (1 + self.asteroids.index(asteroid)
                                                        / NUM_ASTEROIDS))
+        # Reset background and start line
+        self.BgMovement.reset()
 
         while running:
-            # Move and draw the background
-            self.BgMovement.redrawWindow(self.screen, self.background)
-
-            if self.width / 1.3 - finish_line_shift > -self.finish_line.get_width():
-                self.screen.blit(self.finish_line, (self.width /
-                                                    1.3 - finish_line_shift, 0))
-
-                font = pygame.font.Font("./Fonts/GamePlayed.ttf", 70)
-                text = font.render("START", True, WHITE)
-                text = pygame.transform.rotate(text, -90)
-                self.screen.blit(text, [self.width /
-                                        1.15 - finish_line_shift, self.height/2 - text.get_height()/2])
-
-                finish_line_shift += FINISH_LINE_SPEED
+            # Move and draw the background, with start line
+            self.BgMovement.run(self.screen, self.background)
 
             # Move and draw the rocket each game tick
             self.rocket.run(self.screen, self.width, self.height)
@@ -216,6 +205,8 @@ class run_scratch:
                 # Explode rocket and show game over screen
                 self.rocket.Explosion(self.screen, self.clock)
                 self.game_over()
+                # Reset background and start line
+                self.BgMovement.reset()
                 # Reset the rocket to the middle position
                 self.rocket.reset(self.width / 2, self.height / 2)
                 # Reset all of the asteroids
@@ -227,7 +218,6 @@ class run_scratch:
                 if not self.play_again:
                     running = False
                 play_collision = False
-                finish_line_shift = 0
                 self.play_again = False
 
     def get_key(self):
