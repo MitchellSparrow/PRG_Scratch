@@ -47,6 +47,8 @@ class run_scratch:
             (self.width, self.height), pygame.RESIZABLE)
         self.background = pygame.image.load(
             "./Images/Backgrounds/Space_Background_1080.jpg")
+        self.finish_line = pygame.image.load(
+            "./Images/Finish_line/Finish_line.png")
         pygame.display.set_caption("Team Scratch")
         self.rocket_image = pygame.image.load("./Images/Rockets/Rocket1.png")
         self.clock = pygame.time.Clock()
@@ -156,12 +158,30 @@ class run_scratch:
         # Local function variables
         running = True
         play_collision = False
+        finish_line_shift = 0
+
         # Reset rocket to original position
         self.rocket.reset(self.width / 2, self.height / 2)
+        for asteroid in self.asteroids:
+            asteroid.reset(
+                self.width, self.height, self.width * (1 + self.asteroids.index(asteroid)
+                                                       / NUM_ASTEROIDS))
 
         while running:
             # Move and draw the background
             self.BgMovement.redrawWindow(self.screen, self.background)
+
+            if self.width / 1.3 - finish_line_shift > -self.finish_line.get_width():
+                self.screen.blit(self.finish_line, (self.width /
+                                                    1.3 - finish_line_shift, 0))
+
+                font = pygame.font.Font("./Fonts/GamePlayed.ttf", 70)
+                text = font.render("START", True, WHITE)
+                text = pygame.transform.rotate(text, -90)
+                self.screen.blit(text, [self.width /
+                                        1.15 - finish_line_shift, self.height/2 - text.get_height()/2])
+
+                finish_line_shift += FINISH_LINE_SPEED
 
             # Move and draw the rocket each game tick
             self.rocket.run(self.screen, self.width, self.height)
@@ -207,6 +227,7 @@ class run_scratch:
                 if not self.play_again:
                     running = False
                 play_collision = False
+                finish_line_shift = 0
                 self.play_again = False
 
     def get_key(self):
