@@ -13,10 +13,12 @@ class Asteroid:
     # 2: https://www.clipartkey.com/view/JRTbTo_asteroid-png-picture-asteroid/
     # 3: https://www.clipartkey.com/view/mmbhJw_clip-art-asteroid-picture-transparent-psyche-asteroid/
     asteroid_images = [pygame.image.load("Images/Asteroids/Asteroid1.png"), pygame.image.load(
-        "Images/Asteroids/Asteroid2.png"), pygame.image.load("Images/Asteroids/Asteroid3.png")]
+        "Images/Asteroids/Asteroid2.png"), pygame.image.load("Images/Asteroids/Asteroid3.png"), pygame.image.load(
+        "Images/Asteroids/Asteroid4.png"), pygame.image.load("Images/Asteroids/Asteroid5.png"), pygame.image.load(
+        "Images/Asteroids/Asteroid6.png"), ]
 
     def __init__(self, width, height, init_val):
-        rnum = random.randint(0, 2)
+        rnum = random.randint(0, 5)
         self.image = self.asteroid_images[rnum]
         self.image = pygame.transform.scale(self.image, ((int(self.image.get_width(
         )*Aminsize/1000), int(self.image.get_height() * Aminsize/1000))))
@@ -36,7 +38,7 @@ class Asteroid:
         self.points = 1
         self.difficulty = DIFFICULTY
         self.collision = False
-        rnum = random.randint(0, 2)
+        rnum = random.randint(0, 5)
         self.image = self.asteroid_images[rnum]
         self.image = pygame.transform.scale(self.image, ((int(self.image.get_width(
         )*Aminsize/1000), int(self.image.get_height() * Aminsize/1000))))
@@ -50,7 +52,7 @@ class Asteroid:
         if self.x_pos > - self.image.get_width():
             self.x_pos -= Asteroid_speed
         else:
-            rnum = random.randint(0, 2)
+            rnum = random.randint(0, 5)
             rnum2 = random.randrange(Aminsize, Amaxsize)/1000
             self.image = self.asteroid_images[rnum]
             self.image = pygame.transform.scale(self.image, ((
@@ -67,8 +69,12 @@ class Asteroid:
         surface.blit(self.image, (self.x_pos, self.y_pos))
         self.topleft = (self.x_pos, self.y_pos)
         self.rect = self.image.get_rect(topleft=(self.topleft))
+        self.hitbox1 = self.rect
+        self.hitbox1.center = self.rect.center
+        self.hitbox = self.hitbox1.inflate(
+            -ASTEROID_HIT_BOX_DOWNSCALE, -ASTEROID_HIT_BOX_DOWNSCALE)
 
     def checkCollision(self, rocket):
-        col = self.rect.colliderect(rocket.Rect)
+        col = self.hitbox.colliderect(rocket.Rect)
         if col == True:
             self.collision = True

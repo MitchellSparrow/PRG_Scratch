@@ -9,6 +9,8 @@ from BgMovement import BgMovement
 
 
 class run_scratch:
+    '''The main class for the scratch game'''
+
     ### DEFAULT GAME SETTINGS ###
     click = False
     play_music = True
@@ -21,12 +23,14 @@ class run_scratch:
     quit = False
 
     def __init__(self):
+        '''Function which initializes the game'''
+
         # Initialize pygame
         pygame.init()
 
-        # try to load the settings file
+        # Try to load the settings file and update the global variables
         try:
-            file = open("settings.txt", "rb")  # read binary
+            file = open("settings.txt", "rb")
             settings = pickle.load(file)
             self.play_music = settings['play_music']
             self.highscore = settings['highscore']
@@ -36,7 +40,7 @@ class run_scratch:
         except FileNotFoundError:
             pass
 
-        # Initialise variables / Images / Clock
+        # Initialise the screen, background, display and clock
         self.max_width, self.max_height = pygame.display.Info(
         ).current_w, pygame.display.Info().current_h
         self.screen = pygame.display.set_mode(
@@ -51,14 +55,16 @@ class run_scratch:
         # Initialize Moving Background
         self.BgMovement = BgMovement()
 
-        # Initialize Asteroids
+        # Initialize Asteroids for the Play screen
         self.asteroids = []
         for i in range(NUM_ASTEROIDS):
             self.asteroids.append(Asteroid(
                 self.width, self.height, self.width * (1 + i/NUM_ASTEROIDS)))
 
-        # Initialise Rockets
+        # Initialise Rocket - For the Play screen
         self.rocket = Rocket(self.width, self.height, self.fullscreen)
+
+        # Initialise Rockets and Asteroids - For the Tutorial screen
         self.Trocket = Rocket(self.width, self.height, self.fullscreen)
         self.T_asteroid = Asteroid(self.width, self.height, self.width)
 
@@ -69,13 +75,13 @@ class run_scratch:
             pygame.mixer.music.play(
                 -1)
 
-        # Run Game
+        # Run the Game
         self.run()
 
     def show_home_screen(self):
         '''Function which displays the home screen of the game'''
 
-        # Background / Images on home screen
+        # Show static background image on home screen
         self.screen.blit(self.background, (0, 0))
         rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
         self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
@@ -113,9 +119,9 @@ class run_scratch:
         self.draw_text("Quit", 20, WHITE,
                        2*self.width/3, self.height*4/5)
 
-        # Fullscreen / Resizeable text on homescreen
         self.click = False
 
+        # Fullscreen / Resizeable text on homescreen
         if self.fullscreen:
             self.draw_text_title(TITLE, 80, WHITE,
                                  self.width / 2, self.height / 6)
@@ -147,6 +153,7 @@ class run_scratch:
     def play(self):
         '''Function which starts the game'''
 
+        # Local function variables
         running = True
         play_collision = False
         # Reset rocket to original position
@@ -159,6 +166,7 @@ class run_scratch:
             # Move and draw the rocket each game tick
             self.rocket.run(self.screen, self.width, self.height)
 
+            # Set score to 0 before adding the accumulative asteroids score
             self.score = 0
 
             # Move and draw all asteroids each game tick
@@ -173,6 +181,7 @@ class run_scratch:
             self.draw_text(f"Score: {self.score - NUM_ASTEROIDS}",
                            30, WHITE, 100, 10)
 
+            # Update the screen and wait before looping again
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -187,11 +196,14 @@ class run_scratch:
                 # Explode rocket and show game over screen
                 self.rocket.Explosion(self.screen, self.clock)
                 self.game_over()
+                # Reset the rocket to the middle position
                 self.rocket.reset(self.width / 2, self.height / 2)
+                # Reset all of the asteroids
                 for asteroid in self.asteroids:
                     asteroid.reset(
                         self.width, self.height, self.width * (1 + self.asteroids.index(asteroid)
                                                                / NUM_ASTEROIDS))
+                # Check if the user wants to play again - if not, break out of play loop
                 if not self.play_again:
                     running = False
                 play_collision = False
@@ -225,18 +237,19 @@ class run_scratch:
 
     def game_over(self):
         '''Function which shows the game over screen'''
-
+        # Local function variables
         running = True
 
         while running:
+            # Show the static background with a static rocket image
             self.screen.blit(self.background, (0, 0))
             rotated_rocket = pygame.transform.rotate(self.rocket_image, 25)
             self.screen.blit(rotated_rocket, (self.width/10, self.height/2))
-            mx, my = pygame.mouse.get_pos()
 
             # Text on game over screen - Fullscreen / Resizeable
             self.click = False
 
+            # Fullscreen / Resizeable text on game over screen
             if self.fullscreen:
                 self.draw_text_title("GAME OVER", 72, WHITE,
                                      self.width / 2, self.height / 5)
@@ -257,7 +270,7 @@ class run_scratch:
                 self.flash_text("Press space to try again!",
                                 22, WHITE, self.width / 2, self.height / 1.5)
 
-            # Update display
+            # Update display and wait
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -283,24 +296,24 @@ class run_scratch:
 
     def tutorial(self):
         '''Function which shows the tutorial screen'''
-
+        # Local function variables
         running = True
-        # Reset rocket to original position
+        # Reset rocket and asteroids to their original positions
         self.Trocket.reset(self.width / 2.1, self.height / 1.5)
         self.T_asteroid.reset(self.width, self.height, self.width)
 
         while running:
-            # Background
+            # Show the static background
             self.screen.blit(self.background, (0, 0))
 
-            # Tutorial rocket
+            # Tutorial rocket and asteroid - move and draw them
             key = pygame.key.get_pressed()
             self.Trocket.Movement(self.width, self.height)
             self.Trocket.Draw(self.screen)
             self.T_asteroid.Movement(self.width, self.height)
             self.T_asteroid.Draw(self.screen)
 
-            # Tutorial screen text
+            # Fullscreen / Resizeable text on tutorial screen
             if self.fullscreen:
                 self.draw_text_title("Tutorial",
                                      72, WHITE, self.width / 2, self.height / 7)
@@ -320,7 +333,7 @@ class run_scratch:
                 self.draw_text("Your score increases with asteroids passed, try to beat the high score!",
                                20, WHITE, self.width / 2, 4*self.height / 6)
 
-            # Update display
+            # Update display and wait
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -328,7 +341,7 @@ class run_scratch:
             running = self.get_key()
 
     def draw_text(self, text, size, color, x, y):
-        '''Function which draws NORMAL text on the screen with a specific font and colour'''
+        '''Function which draws NORMAL text on the screen with a specific font, size and colour'''
         font = pygame.font.Font("./Fonts/GamePlayed.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
@@ -336,7 +349,7 @@ class run_scratch:
         self.screen.blit(text_surface, text_rect)
 
     def draw_text_title(self, text, size, color, x, y):
-        '''Function which draws a TITLE text on the screen with a specific font and colour'''
+        '''Function which draws a TITLE text on the screen with a specific font, size and colour'''
         font = pygame.font.Font("./Fonts/Retronoid1.ttf", size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
@@ -345,17 +358,17 @@ class run_scratch:
 
     def settings(self):
         '''Function which shows the settings screen'''
+        # Local function variables
         running = True
         self.click = False
 
         while running:
 
-            # Get mouse position
+            # Get the mouse position
             mx, my = pygame.mouse.get_pos()
 
-            # Draw Background and text to settings screen
+            # Draw Background and text to the settings screen
             self.screen.blit(self.background, (0, 0))
-
             self.draw_text_title("SETTINGS", 70, WHITE,
                                  self.width / 2, self.height / 7)
             self.draw_text("Press ESC to go back",
@@ -372,7 +385,7 @@ class run_scratch:
             on_off_button2 = pygame.Rect(
                 self.width*2/3 - 30, self.height/1.5, 60, 40)
 
-            # MUSIC option
+            # Change the music button text and layout depending on state
             if self.play_music:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button, border_radius=20)
@@ -384,6 +397,7 @@ class run_scratch:
                 self.draw_text("OFF", 20, LIGHTBLUE,
                                self.width*2/3, self.height/2 + 7.5)
 
+            # Play or pause the music
             if on_off_button.collidepoint((mx, my)):
                 if self.click:
                     if self.play_music:
@@ -393,7 +407,7 @@ class run_scratch:
                         pygame.mixer.music.play(-1)
                         self.play_music = True
 
-           # FULLSCREEN option - Cannot handle dual monitors with different resolutions
+           # Change the fullscreen button text and layout depending on state
             if self.fullscreen:
                 pygame.draw.rect(self.screen, LIGHTBLUE,
                                  on_off_button2, border_radius=20)
@@ -405,9 +419,12 @@ class run_scratch:
                 self.draw_text("OFF", 20, LIGHTBLUE,
                                self.width*2/3, self.height/1.5 + 7.5)
 
+            # Change the screen to a windowed or fullscreen option
             if on_off_button2.collidepoint((mx, my)):
                 if self.click:
                     self.fullscreen = not self.fullscreen
+                    # The rocket size changes depending on the display size otherwise the game would
+                    # be too easy, therefore the rocket needs to be re-initialized on this change
                     self.rocket = Rocket(
                         self.width, self.height, self.fullscreen)
                     self.Trocket = Rocket(
@@ -423,13 +440,14 @@ class run_scratch:
                             bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                             self.background = pygame.image.load(bg_path)
 
+                        # Set the display to fullscreen
                         self.width = self.max_width
                         self.height = self.max_height
                         self.screen = pygame.display.set_mode(
                             (self.width, self.height), pygame.FULLSCREEN)
 
                     else:
-                        # Load smaller background, set windo to default size
+                        # Load smaller background, set window to default size
                         bg_path = "./Images/Backgrounds/Space_Background_1080.jpg"
                         self.background = pygame.image.load(bg_path)
                         self.screen = pygame.display.set_mode(
@@ -475,14 +493,17 @@ class run_scratch:
 
     def exit(self):
         # Program termination
-
+        # For Windows or Linux users
         if platform.system() in ['Windows', 'Linux']:
-            pygame.quit()  # for Windows or Linux users
+            pygame.quit()
+        # For Mac users.
         else:
-            os._exit(0)  # for Mac users.
+            os._exit(0)
 
-        file = open("settings.txt", "wb")  # write binary
+        # Open the settings file
+        file = open("settings.txt", "wb")
 
+        # Save the users screen width and height, their music preference, and highscore
         if not self.fullscreen:
             pickle.dump({'play_music': self.play_music,
                          'highscore': self.highscore,
@@ -493,6 +514,7 @@ class run_scratch:
                          'highscore': self.highscore,
                          'width': WIDTH,
                          'height': HEIGHT}, file)
+        # Close the settings file
         file.close()
 
 
