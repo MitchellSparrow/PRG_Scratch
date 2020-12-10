@@ -1,6 +1,5 @@
 import pygame
 from globals import *
-import numpy as np
 
 # Rocket object functions
 
