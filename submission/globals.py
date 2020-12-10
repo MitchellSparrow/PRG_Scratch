@@ -1,0 +1,37 @@
+# STATIC GLOBAL VARIABLES
+
+# Window screen settings
+HEIGHT = 600
+WIDTH = 1000
+FULLSCREEN = False
+
+# Game Title
+TITLE = "Scratch"
+
+# Colours
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+LIGHTBLUE = (0, 155, 155)
+TRANSPARENT = (0, 0, 0, 0)
+
+# Rocket settings
+ROCKET_FS_SCALING = 1.5
+ROCKET_NORMAL_SCALING = 2
+BORDER = 40
+EXPLOSION_SCALING = 0.4
+EXPLOSION_FS_SCALING = 0.2
+
+# Asteroid settings
+Aminsize = 75
+Amaxsize = 125
+NUM_ASTEROIDS = 5
+ASTEROID_HIT_BOX_DOWNSCALE = 15
+
+# Other settings
+FPS = 60
+FONT_NAME = 'arial'
+CLICK = False
+DIFFICULTY = 1
+BACKGROUND_SPEED = 1.5
+FINISH_LINE_SPEED = 3.5
+FLASH_RATE = 1.2
